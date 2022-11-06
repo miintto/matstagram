@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  nginx:
+    image: nginx:1.21.6
+    ports:
+      - 80:80
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./static/:/usr/src/static/
+    depends_on:
+      - uvicorn-was
+
+  uvicorn-was:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ./logs/:/usr/src/logs/
+    environment:
+      APP_ENV: ${APP_ENV}
+      SECRET_KEY: ${SECRET_KEY}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      SQLALCHEMY_POOL_SIZE: ${SQLALCHEMY_POOL_SIZE}

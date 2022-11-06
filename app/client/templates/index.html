@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link type="text/css" href="{{ url_for('static', path='/css/home.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', path='/js/home.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="content-head">
+    <div class="title">
+      <h1>맛스타그램</h1>
+    </div>
+    <div class="description">
+      <p>지도에서 나만의 맛집을 추가하고 관리하자!</p>
+    </div>
+  </div>
+  <div class="login-container">
+    <div class="input-section">
+      <input id="input-user-email" class="input-placeholder" type="text" placeholder="E-mail" onkeyup="onkeyupLogin()" name="userEmail">
+    </div>
+    <div class="input-section">
+      <input id="input-password" class="input-placeholder" type="password" placeholder="Password" onkeyup="onkeyupLogin()" name="password">
+    </div>
+    <div class="message-section">
+      <div class="exception-message"></div>
+    </div>
+    <div class="button-section">
+      <div class="submit-button">
+        <a onclick="submitLogin()" type="button">로그인</a>
+      </div>
+    </div>
+  </div>
+  <div class="signup-container">
+    <div class="signup-section">
+      <a href="/map">아직 계정이 없으신가요?</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
