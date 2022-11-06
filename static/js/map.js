@@ -47,3 +47,7 @@ map.on('click', (evt) => {
     $("#place-tags").html(tags);
   }
 });
+
+const Logout = () => {
+  window.location.replace("/");
+}

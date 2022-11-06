@@ -18,6 +18,7 @@ services:
       - 8000:8000
     volumes:
       - ./logs/:/usr/src/logs/
+      - ./static/:/usr/src/static/
     environment:
       APP_ENV: ${APP_ENV}
       SECRET_KEY: ${SECRET_KEY}

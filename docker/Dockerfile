@@ -37,6 +37,7 @@ RUN apt-get -y update \
 COPY --from=build /usr/src/venv /usr/src/venv
 
 COPY ./app /usr/src/app
+COPY ./static /usr/src/static
 
 WORKDIR /usr/src
 
