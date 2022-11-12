@@ -34,8 +34,8 @@ const createFeature = (place) => {
   return feature
 }
 
-map.on('click', (evt) => {
-  var feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => { return feature; });
+map.on("click", (e) => {
+  var feature = map.forEachFeatureAtPixel(e.pixel, (feature) => { return feature; });
   if (feature) {
     $("#place-info").show();
     $("#place-title").html(`<p>` + feature.get("place_name") + `</p>`);
@@ -48,6 +48,10 @@ map.on('click', (evt) => {
   }
 });
 
-const Logout = () => {
+$(".place-info-component").click((e) => {
+  $(".place-info").hide();
+})
+
+$("#button-logout").click((e) => {
   window.location.replace("/");
-}
+})
