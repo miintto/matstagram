@@ -13,34 +13,11 @@
 
 {% block content %}
 <div id="map" class="map" style="height: 100%; width: 100%;"></div>
-<div id="place-info" class="place-info" style="display:none">
-  <div class="place-info-component">
-    <div class="place-info-section image-section">
-      <img src="{{ url_for('static', path='/img/place-blank.jpg') }}" width="120">
-    </div>
-    <div class="place-info-section">
-      <div id="place-title" class="place-title">
-        <p></p>
-      </div>
-      <div id="place-description" class="place-description">
-        <p></p>
-      </div>
-      <div id="place-tags" class="place-tags"></div>
-    </div>
-    </div>
-  </div>
-</div>
-<div class="menubar">
-  <div class="menubar-button">
-    <div class="menubar-button-section">
-      <div id="button-logout" onclick="Logout()">로그아웃</div>
-    </div>
-    <div class="menubar-button-section">
-      <div>리스트</div>
-    </div>
-    <div class="menubar-button-section">
-      <div>내 정보</div>
-    </div>
-  </div>
-</div>
+
+<!-- 식당 정보 영역 -->
+{% include "map/place-info.html" %}
+
+<!-- 하단 메뉴바 영역 -->
+{% include "map/menubar.html" %}
+
 {% endblock %}
