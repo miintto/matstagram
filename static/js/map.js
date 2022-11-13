@@ -13,7 +13,7 @@ const map = new ol.Map({
     center: ol.proj.fromLonLat([126.98, 37.55]),
     zoom: 13,
   }),
-})
+});
 
 var markerStyle = new ol.style.Style({
   image: new ol.style.Icon({
@@ -32,10 +32,10 @@ const createFeature = (place) => {
     tags: place.tags,
   });
   return feature
-}
+};
 
 map.on("click", (e) => {
-  var feature = map.forEachFeatureAtPixel(e.pixel, (feature) => { return feature; });
+  var feature = map.forEachFeatureAtPixel(e.pixel, (f) => { return f; });
   if (feature) {
     $("#place-info").show();
     $("#filter").hide();
@@ -46,44 +46,45 @@ map.on("click", (e) => {
       tags = tags + `<p>#` + e.tag_name + `</p>`;
     });
     $("#place-tags").html(tags);
-  }
+  };
 });
 
-$(".place-info-component").click((e) => {
-  $("#place-info").hide();
-})
+$(".place-info-component").click((e) => { $("#place-info").hide(); });
 
 $("#button-filter").click((e) => {
   if ($(".filter-tag-list").find(".filter-tag-section").length == 0) {
     requestTagList();
-  }
+  };
   $("#place-info").hide();
   $("#filter").show();
-})
+});
 
 const deactivateTag = (target) => {
   target.removeClass("filter-tag-active");
   target.addClass("filter-tag-inactive");
-}
+};
 
 const activateTag = (target) => {
   target.removeClass("filter-tag-inactive");
   target.addClass("filter-tag-active");
-}
+};
 
 const choiceFilterTag = (e) => {
   const target = $(e.currentTarget);
   if (target.hasClass("filter-tag-active")) {
     deactivateTag(target);
+    if ($(".filter-tag-active").length === 0) {
+      activateTag($("#filter-tag-all"));
+    };
   } else {
     if (target.index(0) === 0) {
-      deactivateTag($(".filter-tag-normal"))
+      deactivateTag($(".filter-tag-normal"));
     } else {
       deactivateTag($("#filter-tag-all"));
-    }
+    };
     activateTag(target);
-  }
-}
+  };
+};
 
 $("#button-apply-filter").click((e) => {
   let tagList = [];
@@ -95,12 +96,12 @@ $("#button-apply-filter").click((e) => {
     .forEach(layer => map.removeLayer(layer));
   requestDisplayPlaces({tags: tagList.join(",")});
   $("#filter").hide();
-})
+});
 
 $("#button-cancel-filter").click((e) => {
   $("#filter").hide();
-})
+});
 
 $("#button-logout").click((e) => {
   window.location.replace("/");
-})
+});
