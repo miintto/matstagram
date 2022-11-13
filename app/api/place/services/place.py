@@ -24,20 +24,25 @@ class PlaceManager:
             raise APIException(Http4XX.PLACE_NOT_FOUND)
         return PlaceSerializer(data).serialize()[0]
 
-    def get_place_list(self, user: AuthUser, session: Session) -> ResultList:
+    def _get_user_pk(self, user: AuthUser) -> int:
         if user.user_permission == UserPermission.anonymous:  # TODO: 비회원 처리
-            user_pk = 1
-        else:
-            user_pk = user.id
+            return 1
+        return user.id
+
+    def get_place_list(
+        self, user: AuthUser, tags: str, session: Session
+    ) -> ResultList:
         data = (
             session.query(Place, Tag)
             .join(PlaceTag, Place.id == PlaceTag.place_id, isouter=True)
             .join(Tag, Tag.id == PlaceTag.tag_id, isouter=True)
-            .filter(Place.user_id == user_pk)
-            .order_by(Place.id, Tag.id)
-            .all()
+            .filter(Place.user_id == self._get_user_pk(user))
         )
-        return PlaceSerializer(data).serialize()
+        if tags:
+            data = data.filter(Tag.id.in_(list(map(int, tags.split(",")))))
+        return PlaceSerializer(
+            data=data.order_by(Place.id, Tag.id).all()
+        ).serialize()
 
     def _create_place_bucket(
         self, user: AuthUser, body: PlaceRegisterBody, session: Session

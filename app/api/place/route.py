@@ -27,12 +27,14 @@ async def get_place(
 
 @router.get("/place")
 async def get_place_list(
+    tags: str = "",
     user: AuthUser = Depends(IsAuthenticated()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
     """장소 리스트"""
     return APIResponse(
-        Http2XX.SUCCESS, data=PlaceManager().get_place_list(user, session)
+        Http2XX.SUCCESS,
+        data=PlaceManager().get_place_list(user, tags, session),
     )
 
 
