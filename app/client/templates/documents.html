@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link type="text/css" href="{{ url_for('static', path='/css/home.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', path='/js/document.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="content-head">
+    <div class="title">
+      <h1>API 문서</h1>
+    </div>
+    <div class="description">
+      <p>Redoc 기반의 API 문서를 확인할 수 있습니다.</p>
+    </div>
+  </div>
+  <div class="login-container">
+    <div class="input-section">
+      <input id="input-user-email" class="input-placeholder" type="text" placeholder="E-mail" onkeyup="onkeyupLogin()" name="userEmail">
+    </div>
+    <div class="input-section">
+      <input id="input-password" class="input-placeholder" type="password" placeholder="Password" onkeyup="onkeyupLogin()" name="password">
+    </div>
+    <div class="message-section">
+      <div class="exception-message"></div>
+    </div>
+    <div class="button-section">
+      <div class="submit-button">
+        <a onclick="submitLogin()" type="button">로그인</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

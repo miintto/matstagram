@@ -74,6 +74,6 @@ class AdminOnly(BasePermission):
         self, credentials: HTTPAuthorizationCredentials, session: Session
     ) -> AuthUser:
         user = self.get_user(credentials, session)
-        if not user.is_admin:
+        if not user.user_permission.is_admin:
             raise APIException(Http4XX.PERMISSION_DENIED)
         return user

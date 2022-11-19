@@ -12,7 +12,8 @@ from ..schemas import TagBody
 class TagHandler:
     @staticmethod
     def get_user_tag_list(user: AuthUser, session: Session) -> ResultList:
-        tags = session.query(Tag).filter(Tag.user_id == user.id).all()
+        user_pk = 1 if user.user_permission.is_anonymous() else user.id  # TODO: 비회원 처리
+        tags = session.query(Tag).filter(Tag.user_id == user_pk).all()
         return [tag.to_dict() for tag in tags]
 
     def create(self, user: AuthUser, body: TagBody, session: Session) -> bool:

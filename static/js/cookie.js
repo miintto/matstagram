@@ -1,5 +1,5 @@
 const setCookie = (cookie_name, value) => {
-  document.cookie = cookie_name + "=" + value;
+  document.cookie = cookie_name + "=" + value + ";path=/";
 };
 
 const getCookie = (key) => {

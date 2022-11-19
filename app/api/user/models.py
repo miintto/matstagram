@@ -12,6 +12,12 @@ class UserPermission(enum.Enum):
     normal = "normal"
     admin = "admin"
 
+    def is_anonymous(self):
+        return self == self.anonymous
+
+    def is_admin(self):
+        return self == self.admin
+
 
 class AuthUser(Base):
     __tablename__ = "t_auth_user"
@@ -28,7 +34,6 @@ class AuthUser(Base):
         Enum(UserPermission), comment="사용자 권한", nullable=False
     )
     is_active = Column(Boolean, comment="활성화 여부", nullable=False, default=True)
-    is_admin = Column(Boolean, comment="관리자 여부", nullable=False, default=False)
     created_dtm = Column(
         DateTime, comment="생성 일시", nullable=False, default=datetime.utcnow
     )
@@ -51,7 +56,6 @@ class AuthUser(Base):
             "user_email": self.user_email,
             "user_permission": self.user_permission.name,
             "is_active": self.is_active,
-            "is_admin": self.is_admin,
             "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%H:%S.%f"),
             "last_login_dtm": (
                 self.last_login_dtm.strftime("%Y-%m-%d %H:%H:%S.%f")
