@@ -6,7 +6,7 @@ from app.common.exception import APIException
 from app.common.response.codes import Http4XX
 from app.common.types import ResultDict, ResultList
 from ..models import Tag
-from ..schemas import TagBody
+from ..schemas.request import TagBody
 
 
 class TagHandler:

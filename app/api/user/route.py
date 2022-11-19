@@ -4,16 +4,31 @@ from sqlalchemy.orm import Session
 
 from app.common.response import APIResponse
 from app.common.response.codes import Http2XX, Http4XX
+from app.common.schemas import (
+    CommonResponse,
+    PermissionDeniedResponse,
+    SuccessResponse,
+    UnauthenticatedResponse,
+)
 from app.common.security.permission import AdminOnly, IsNormalUser
 from app.config.connection import db
 from .models import AuthUser
-from .schemas import NewPasswordBody, UserInfoBody
+from .schemas.request import NewPasswordBody, UserInfoBody
+from .schemas.response import UserResponse
 from .services.user_profile import UserProfile
 
 router = APIRouter(prefix="/user", tags=["User"])
 
 
-@router.get("")
+@router.get(
+    "",
+    response_model=UserResponse,
+    responses={
+        200: {"description": "조회 성공."},
+        401: {"description": "인증 실패", "model": UnauthenticatedResponse},
+        403: {"description": "권한 없음", "model": PermissionDeniedResponse},
+    },
+)
 async def get_my_profile(
     user: AuthUser = Depends(IsNormalUser())
 ) -> APIResponse:
@@ -21,7 +36,16 @@ async def get_my_profile(
     return APIResponse(Http2XX.SUCCESS, data=user.to_dict())
 
 
-@router.patch("")
+@router.patch(
+    "",
+    response_model=UserResponse,
+    responses={
+        200: {"description": "정보 수정 성공."},
+        401: {"description": "인증 실패", "model": UnauthenticatedResponse},
+        403: {"description": "권한 없음", "model": PermissionDeniedResponse},
+        422: {"description": "정보 수정 실패.", "model": CommonResponse},
+    },
+)
 async def change_my_info(
     body: UserInfoBody,
     user: AuthUser = Depends(IsNormalUser()),
@@ -33,20 +57,38 @@ async def change_my_info(
     )
 
 
-@router.patch("")
+@router.patch(
+    "/password",
+    response_model=SuccessResponse,
+    responses={
+        200: {"description": "비밀번호 변경 성공."},
+        401: {"description": "인증 실패", "model": UnauthenticatedResponse},
+        403: {"description": "권한 없음", "model": PermissionDeniedResponse},
+        422: {"description": "비밀번호 변경 실패.", "model": CommonResponse},
+    },
+)
 async def change_password(
     body: NewPasswordBody,
     user: AuthUser = Depends(IsNormalUser()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """내 정보 수정"""
+    """비밀번호 변경"""
     return APIResponse(
         Http2XX.SUCCESS,
         data=UserProfile().change_password(user, body, session),
     )
 
 
-@router.get("/{pk}")
+@router.get(
+    "/{pk}",
+    response_model=UserResponse,
+    responses={
+        200: {"description": "조회 성공."},
+        401: {"description": "인증 실패", "model": UnauthenticatedResponse},
+        403: {"description": "권한 없음", "model": PermissionDeniedResponse},
+        404: {"description": "조회 실패.", "model": CommonResponse},
+    },
+)
 async def get_user_profile(
     pk: int,
     user: AuthUser = Depends(AdminOnly()),

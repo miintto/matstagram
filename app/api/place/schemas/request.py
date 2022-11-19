@@ -6,7 +6,7 @@ class PlaceRegisterBody(BaseModel):
     description: str | None
     lat: float
     lng: float
-    tag_ids: list | None
+    tag_ids: list[int]
 
 
 class TagBody(BaseModel):

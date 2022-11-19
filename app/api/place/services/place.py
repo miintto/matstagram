@@ -5,7 +5,7 @@ from app.common.exception import APIException
 from app.common.response.codes import Http4XX
 from app.common.types import ResultDict, ResultList
 from ..models import Place, PlaceTag, Tag
-from ..schemas import PlaceRegisterBody
+from ..schemas.request import PlaceRegisterBody
 from ..serializers import PlaceSerializer
 
 

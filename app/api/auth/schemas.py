@@ -2,7 +2,7 @@ from typing import TypedDict
 
 from pydantic import BaseModel, EmailStr
 
-from app.common.schemas import CommonResponse
+from app.common.schemas import SuccessResponse
 
 
 class SignUpBody(BaseModel):
@@ -18,8 +18,8 @@ class TokenData(TypedDict):
     refresh: str
 
 
-class TokenResponse(CommonResponse):
-    """발급한 토큰 응답 response"""
+class TokenResponse(SuccessResponse):
+    """발급한 토큰 응답"""
 
     data: TokenData
 
@@ -27,5 +27,5 @@ class TokenResponse(CommonResponse):
 class LogInBody(BaseModel):
     """로그인 body"""
 
-    user_email: str
+    user_email: EmailStr
     password: str

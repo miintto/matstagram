@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.common.exception import APIException
 from app.common.response.codes import Http4XX
 from ..models import AuthUser
-from ..schemas import NewPasswordBody, UserInfoBody
+from ..schemas.request import NewPasswordBody, UserInfoBody
 
 
 class UserProfile:
