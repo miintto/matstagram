@@ -12,7 +12,7 @@ class SignUp:
     @staticmethod
     def _validate(body: SignUpBody, session: Session):
         if body.password != body.password_check:
-            raise APIException(Http4XX.BAD_REQUEST, data="비밀번호가 서로 일치하지 않습니다.")
+            raise APIException(Http4XX.MISMATCHED_PASSWORD)
         if session.query(AuthUser).filter(
             AuthUser.user_email == body.user_email
         ).first():

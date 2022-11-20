@@ -6,7 +6,6 @@ from app.common.response import APIResponse
 from app.common.response.codes import Http2XX
 from app.common.schemas import (
     CommonResponse,
-    CreatedResponse,
     PermissionDeniedResponse,
     UnauthenticatedResponse
 )
@@ -14,8 +13,10 @@ from app.common.security.permission import IsAuthenticated, IsNormalUser
 from app.config.connection import db
 from .schemas.request import PlaceRegisterBody, TagBody
 from .schemas.resopnse import (
+    PlaceCreatedResponse,
     PlaceListResponse,
     PlaceResponse,
+    TagCreatedResponse,
     TagListResponse,
     TagResponse,
 )
@@ -56,7 +57,7 @@ async def get_place(
     },
 )
 async def get_place_list(
-    tags: str = "",
+    tags: str | None = None,
     user: AuthUser = Depends(IsAuthenticated()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
@@ -69,7 +70,7 @@ async def get_place_list(
 
 @router.post(
     "/place",
-    response_model=CreatedResponse,
+    response_model=PlaceCreatedResponse,
     status_code=201,
     responses={
         201: {"description": "장소 등록 성공."},
@@ -84,8 +85,9 @@ async def register_place(
     session: Session = Depends(db.session),
 ) -> APIResponse:
     """장소 등록"""
-    PlaceManager().register(user, body, session)
-    return APIResponse(Http2XX.CREATED)
+    return APIResponse(
+        Http2XX.CREATED, data=PlaceManager().register(user, body, session)
+    )
 
 
 @router.get(
@@ -109,7 +111,7 @@ async def tag_list(
 
 @router.post(
     "/tag",
-    response_model=CreatedResponse,
+    response_model=TagCreatedResponse,
     status_code=201,
     responses={
         201: {"description": "태그 생성 성공."},
@@ -122,7 +124,7 @@ async def create_tag(
     user: AuthUser = Depends(IsNormalUser()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """태그 등록"""
+    """태그 생성"""
     return APIResponse(
         Http2XX.CREATED, data=TagHandler().create(user, body, session)
     )

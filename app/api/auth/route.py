@@ -32,7 +32,9 @@ async def sign_up(
     response_model=TokenResponse,
     responses={
         200: {"description": "성공."},
-        422: {"description": "로그인 실패", "model": CommonResponse},
+        400: {"description": "파라미터 에러", "model": CommonResponse},
+        404: {"description": "이메일 불일치", "model": CommonResponse},
+        422: {"description": "비밀번호 불일치", "model": CommonResponse},
     },
 )
 async def log_in(

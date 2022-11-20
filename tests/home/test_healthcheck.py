@@ -1,13 +1,9 @@
-from fastapi.testclient import TestClient
-
-from app.main import app
-
-client = TestClient(app)
+from ..testcase import BaseTestCase
 
 
-class TestSignUp:
+class TestHealthCheck(BaseTestCase):
     def test_healthcheck(self):
-        response = client.get("/healthcheck")
+        response = self.client.get("/healthcheck")
         assert response.status_code == 200
         res_json = response.json()
         assert res_json.get("status") == "ok"

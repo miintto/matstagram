@@ -19,7 +19,7 @@ class Place(Base):
     __tablename__ = "t_place"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("t_auth_user.id"))
+    user_id = Column(Integer, ForeignKey("t_auth_user.id", ondelete="CASCADE"))
     place_name = Column(
         String(60), comment="장소 이름", nullable=False, unique=True
     )
@@ -48,7 +48,7 @@ class Tag(Base):
     __tablename__ = "t_tag"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("t_auth_user.id"))
+    user_id = Column(Integer, ForeignKey("t_auth_user.id", ondelete="CASCADE"))
     tag_name = Column(String(30), comment="태그 이름", nullable=False)
     memo = Column(Text, comment="메모", nullable=True)
     created_dtm = Column(
@@ -68,8 +68,8 @@ class PlaceTag(Base):
     __tablename__ = "t_place_tag"
 
     id = Column(Integer, primary_key=True)
-    place_id = Column(Integer, ForeignKey("t_place.id"))
-    tag_id = Column(Integer, ForeignKey("t_tag.id"))
+    place_id = Column(Integer, ForeignKey("t_place.id", ondelete="CASCADE"))
+    tag_id = Column(Integer, ForeignKey("t_tag.id", ondelete="CASCADE"))
     created_dtm = Column(
         DateTime, comment="생성 일시", nullable=False, default=datetime.utcnow
     )

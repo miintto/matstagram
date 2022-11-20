@@ -1,29 +1,35 @@
 from datetime import datetime
 from typing import TypedDict
 
-from app.common.schemas import SuccessResponse
+from app.common.schemas import CreatedResponse, SuccessResponse
 
 
 class Tag(TypedDict):
     id: int
     tag_name: str
-    memo: str
-    create_dtm: datetime
+    memo: str | None
+    created_dtm: datetime
 
 
 class Place(TypedDict):
     id: int
     place_name: str
-    description: str
+    description: str | None
     lat: float
     lng: float
-    address: str
+    address: str | None
     created_dtm: datetime
     tags: list[Tag]
 
 
 class PlaceResponse(SuccessResponse):
     """장소 응답"""
+
+    data: Place
+
+
+class PlaceCreatedResponse(CreatedResponse):
+    """태그 등록 응답"""
 
     data: Place
 
@@ -36,6 +42,12 @@ class PlaceListResponse(SuccessResponse):
 
 class TagResponse(SuccessResponse):
     """태그 응답"""
+
+    data: Tag
+
+
+class TagCreatedResponse(CreatedResponse):
+    """태그 생성 응답"""
 
     data: Tag
 

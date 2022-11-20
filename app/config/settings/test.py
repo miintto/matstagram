@@ -42,7 +42,7 @@ class TestSettings(Settings):
         },
     }
 
-    DB_NAME = "test"
+    DB_NAME = "test_db"
     DB_USER = "postgres"
     DB_PASSWORD = "postgres"
     DB_HOST = "localhost"

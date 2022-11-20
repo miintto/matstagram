@@ -1,5 +1,5 @@
 [run]
-source = app.api, app.common
+source = app
 
 [report]
 exclude_lines =

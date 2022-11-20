@@ -31,5 +31,5 @@ class LogIn:
     def run(self, body: LogInBody, session: Session) -> ResultDict:
         user = self._get_user(body.user_email, session)
         if not user.check_password(body.password):
-            raise APIException(Http4XX.MISMATCHED_PASSWORD)
+            raise APIException(Http4XX.INVALID_PASSWORD)
         return self._generate_token(user)

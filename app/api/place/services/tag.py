@@ -20,7 +20,7 @@ class TagHandler:
         tag = Tag(user_id=user.id, tag_name=body.tag_name, memo=body.memo)
         session.add(tag)
         session.commit()
-        return True
+        return tag.to_dict()
 
     def update(
         self, user: AuthUser, tag_id: int, body: TagBody, session: Session

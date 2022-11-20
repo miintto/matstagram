@@ -39,7 +39,7 @@ class UserProfile:
         self, user: AuthUser, body: NewPasswordBody, session: Session
     ) -> bool:
         if not user.check_password(body.password):
-            raise APIException(Http4XX.MISMATCHED_PASSWORD)
+            raise APIException(Http4XX.INVALID_PASSWORD)
         user.set_password(body.new_password)
         session.commit()
         return True

@@ -26,6 +26,7 @@ def create_app():
         exception_handlers=exception_handlers,
         on_startup=[db.startup],
         on_shutdown=[db.shutdown],
+        env=settings.APP_ENV,
     )
 
     # Databases
