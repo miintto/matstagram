@@ -2,3 +2,23 @@ body {
   background-color: var(--color-bg-white);
   font-family: 'Do Hyeon', cursive;
 }
+
+.button-common {
+  display: inline-block;
+  width: 80px;
+  height: 40px;
+  border-radius: 1em;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.button-black {
+  background: var(--color-dark-gray);
+  color: var(--color-bg-white);
+}
+
+.button-gray {
+  background: var(--color-shadow-gray);
+  color: var(--color-bg-white);
+}

@@ -20,8 +20,13 @@ def index(request: Request):
 
 
 @router.get("/map", include_in_schema=False)
-def index(request: Request):
+def display_map(request: Request):
     return template.TemplateResponse("map.html", {"request": request})
+
+
+@router.get("/register", include_in_schema=False)
+def register(request: Request):
+    return template.TemplateResponse("register.html", {"request": request})
 
 
 @router.get("/documents", include_in_schema=False)
