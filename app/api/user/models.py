@@ -3,6 +3,7 @@ import enum
 
 import bcrypt
 from sqlalchemy import Boolean, Column, DateTime, Enum, Integer, String, Text
+from sqlalchemy.orm import relationship
 
 from app.common.models import Base
 
@@ -38,6 +39,7 @@ class AuthUser(Base):
         DateTime, comment="생성 일시", nullable=False, default=datetime.utcnow
     )
     last_login_dtm = Column(DateTime, comment="마지막 로그인 일시", nullable=True)
+    tags = relationship("Tag")
 
     def set_password(self, password: str):
         self.password = bcrypt.hashpw(
@@ -49,17 +51,20 @@ class AuthUser(Base):
             password.encode("utf-8"), self.password.encode("utf-8")
         )
 
-    def to_dict(self) -> dict:
-        return {
+    def to_dict(self, load: bool = False) -> dict:
+        data = {
             "id": self.id,
             "user_name": self.user_name,
             "user_email": self.user_email,
             "user_permission": self.user_permission.name,
             "is_active": self.is_active,
-            "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%H:%S.%f"),
+            "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%H:%S"),
             "last_login_dtm": (
-                self.last_login_dtm.strftime("%Y-%m-%d %H:%H:%S.%f")
+                self.last_login_dtm.strftime("%Y-%m-%d %H:%H:%S")
                 if self.last_login_dtm
                 else None
             ),
         }
+        if load:
+            data["tags"] = [tag.to_dict() for tag in self.tags]
+        return data

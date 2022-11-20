@@ -33,7 +33,7 @@ async def get_my_profile(
     user: AuthUser = Depends(IsNormalUser())
 ) -> APIResponse:
     """내 정보 조회"""
-    return APIResponse(Http2XX.SUCCESS, data=user.to_dict())
+    return APIResponse(Http2XX.SUCCESS, data=user.to_dict(load=True))
 
 
 @router.patch(

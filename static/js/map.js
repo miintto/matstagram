@@ -52,7 +52,7 @@ map.on("click", (e) => {
 $(".place-info-component").click((e) => { $("#place-info").hide(); });
 
 $("#button-filter").click((e) => {
-  if ($(".filter-tag-list").find(".filter-tag-section").length == 0) {
+  if ($("#filter-tag-list").find(".tag-label-section").length == 0) {
     requestTagList();
   };
   $("#place-info").hide();
@@ -105,3 +105,14 @@ $("#button-cancel-filter").click((e) => {
 $("#button-logout").click((e) => {
   window.location.replace("/");
 });
+
+$("#button-profile").click((e) => {
+  $("#filter").hide();
+  $("#place-info").hide();
+  $("#profile").show();
+  if ($("#profile-user-name:has(p)").length === 0) {
+    requestUserProfile();
+  }
+});
+
+$("#button-close-profile").click((e) => { $("#profile").hide(); });

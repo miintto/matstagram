@@ -1,0 +1,46 @@
+<div id="profile" class="profile" style="display:none">
+  <div class="profile-component">
+    <div class="profile-image">
+      <img src="{{ url_for('static', path='/img/place-blank.jpg') }}" width="200">
+    </div>
+    <div class="profile-content">
+      <div class="profile-section">
+        <div class="profile-name profile-text">
+          <p>이름</p>
+        </div>
+        <div id="profile-user-name" class="profile-value profile-text"></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-name profile-text">
+          <p>이메일</p>
+        </div>
+        <div id="profile-user-email" class="profile-value profile-text"></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-name profile-text">
+          <p>가입일시</p>
+        </div>
+        <div id="profile-created-dtm" class="profile-value profile-text"></div>
+      </div>
+      <div class="profile-section">
+        <div class="profile-name profile-text">
+          <p>권한</p>
+        </div>
+        <div id="profile-permission" class="profile-value profile-text"></div>
+      </div>
+    </div>
+    <div class="profile-tag-content">
+      <div class="profile-tag-title">
+        <p>태그</p>
+      </div>
+      <div id="profile-tag-list" class="tag-content-flex"></div>
+    </div>
+  </div>
+  <div class="profile-bottom-component">
+    <div class="profile-exit">
+      <div class="profile-button-section button-common button-black">
+        <div id="button-close-profile">돌아가기</div>
+      </div>
+    </div>
+  </div>
+</div>

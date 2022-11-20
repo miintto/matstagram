@@ -91,13 +91,13 @@
   padding-bottom: 5px;
 }
 
-.filter-tag-list {
+.tag-content-flex {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.filter-tag-section {
+.tag-label-section {
   height: 28px;
   border: 1px;
   border-radius: 1em;
@@ -106,7 +106,7 @@
   cursor: pointer;
 }
 
-.filter-tag-section p {
+.tag-label-section p {
   margin: 0px;
   padding: 2px 12px;
   font-size: 15px;
@@ -161,4 +161,77 @@
 .menubar-button-section {
   margin-left: 15px;
   margin-right: 15px;
+}
+
+.profile {
+  position: fixed;
+  top: 0;
+  left: 0px;
+  right: 0px;
+  height: 100vh;
+  background: var(--color-bg-white);
+}
+
+.profile-component {
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+
+.profile-image {
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+
+.profile-image img {
+  border-radius: 100px;
+}
+
+.profile-content {
+  padding: 20px 0px;
+}
+
+.profile-section {
+  display: flex;
+}
+
+.profile-name {
+  width: 80px;
+}
+
+.profile-value {
+  width: 240px;
+}
+
+.profile-text p {
+  height: 40px;
+  margin: 0px;
+  padding: 0px 10px;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+.profile-tag-title p {
+  font-size: 16px;
+}
+
+.profile-bottom-component {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 50px;
+}
+
+.profile-exit {
+  max-width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-button-section {
+  width: 200px;
 }
