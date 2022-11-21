@@ -2,8 +2,8 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserInfoBody(BaseModel):
-    user_name: str | None
-    user_email: EmailStr | None
+    user_name: str
+    user_email: EmailStr
 
 
 class NewPasswordBody(BaseModel):

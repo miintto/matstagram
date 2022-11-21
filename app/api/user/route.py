@@ -14,7 +14,7 @@ from app.common.security.permission import AdminOnly, IsNormalUser
 from app.config.connection import db
 from .models import AuthUser
 from .schemas.request import NewPasswordBody, UserInfoBody
-from .schemas.response import UserResponse
+from .schemas.response import UserResponse, UserProfileResponse
 from .services.user_profile import UserProfile
 
 router = APIRouter(prefix="/user", tags=["User"])
@@ -22,7 +22,7 @@ router = APIRouter(prefix="/user", tags=["User"])
 
 @router.get(
     "",
-    response_model=UserResponse,
+    response_model=UserProfileResponse,
     responses={
         200: {"description": "조회 성공."},
         401: {"description": "인증 실패", "model": UnauthenticatedResponse},
@@ -81,7 +81,7 @@ async def change_password(
 
 @router.get(
     "/{pk}",
-    response_model=UserResponse,
+    response_model=UserProfileResponse,
     responses={
         200: {"description": "조회 성공."},
         401: {"description": "인증 실패", "model": UnauthenticatedResponse},
@@ -99,4 +99,4 @@ async def get_user_profile(
         user = session.query(AuthUser).filter(AuthUser.id == pk).one()
     except NoResultFound:
         return APIResponse(Http4XX.USER_NOT_FOUND)
-    return APIResponse(Http2XX.SUCCESS, data=user.to_dict())
+    return APIResponse(Http2XX.SUCCESS, data=user.to_dict(load=True))

@@ -30,12 +30,12 @@ class TestSettings(Settings):
         },
         "loggers": {
             "fastapi.request": {
-                "handlers": ["console", "file"],
+                "handlers": ["file"],
                 "level": "DEBUG",
                 "propagate": False,
             },
             "app": {
-                "handlers": ["console", "file"],
+                "handlers": ["file"],
                 "level": "DEBUG",
                 "propagate": False,
             },

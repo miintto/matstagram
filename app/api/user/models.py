@@ -32,7 +32,10 @@ class AuthUser(Base):
     )
     password = Column(Text, comment="비밀번호", nullable=True)
     user_permission = Column(
-        Enum(UserPermission), comment="사용자 권한", nullable=False
+        Enum(UserPermission, native_enum=False, length=15),
+        comment="사용자 권한",
+        nullable=False,
+        default=UserPermission.normal,
     )
     is_active = Column(Boolean, comment="활성화 여부", nullable=False, default=True)
     created_dtm = Column(

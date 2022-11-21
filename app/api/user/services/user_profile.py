@@ -8,8 +8,6 @@ from ..schemas.request import NewPasswordBody, UserInfoBody
 
 class UserProfile:
     def _validate_user_name(self, user_name: str, session: Session) -> bool:
-        if not user_name:
-            return True
         if session.query(AuthUser).filter(
             AuthUser.user_name == user_name
         ).first():
@@ -17,8 +15,6 @@ class UserProfile:
         return True
 
     def _validate_user_email(self, user_email: str, session: Session) -> bool:
-        if not user_email:
-            return True
         if session.query(AuthUser).filter(
             AuthUser.user_email == user_email
         ).first():
@@ -40,6 +36,8 @@ class UserProfile:
     ) -> bool:
         if not user.check_password(body.password):
             raise APIException(Http4XX.INVALID_PASSWORD)
+        if body.new_password != body.new_password_check:
+            raise APIException(Http4XX.MISMATCHED_PASSWORD)
         user.set_password(body.new_password)
         session.commit()
         return True
