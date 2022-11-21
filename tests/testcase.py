@@ -27,15 +27,3 @@ class BaseTestCase:
 
     def _drop_table(self):
         Base.metadata.drop_all(bind=self.db.engine)
-
-    def _create_root_user(self):
-        response = self.client.post(
-            url="/api/auth/signup",
-            json={
-                "user_email": "matstagram@test.com",
-                "password": "1234",
-                "password_check": "1234",
-            },
-        )
-        if response.status_code != 201:
-            raise ValueError(f"생성 실패: {response.text}")
