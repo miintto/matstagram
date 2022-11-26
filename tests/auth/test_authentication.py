@@ -8,7 +8,7 @@ from app.common.response.codes import Http4XX
 from app.common.security.authentication import Authentication
 from app.common.security.jwt import JWTHandler
 from app.common.security.schemas import TokenType
-from ..testcase import BaseTestCase
+from tests.management.testcase import BaseTestCase
 
 
 class TestAuthentication(BaseTestCase):

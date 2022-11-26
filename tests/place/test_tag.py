@@ -7,8 +7,8 @@ from app.api.place.schemas.resopnse import (
     PlaceListResponse,
 )
 from app.common.schemas import CommonResponse
-from ..management.fixtures import PyTestFixtures
-from ..testcase import BaseTestCase
+from tests.management.fixtures import PyTestFixtures
+from tests.management.testcase import BaseTestCase
 
 
 class TestTag(BaseTestCase, PyTestFixtures):

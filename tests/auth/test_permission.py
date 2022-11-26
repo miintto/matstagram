@@ -10,8 +10,8 @@ from app.common.security.permission import (
 )
 from app.common.security.schemas import HTTPAuthorizationCredentials
 from app.common.security.jwt import JWTHandler
-from ..management.fixtures import PyTestFixtures
-from ..testcase import BaseTestCase
+from tests.management.fixtures import PyTestFixtures
+from tests.management.testcase import BaseTestCase
 
 
 class TestPermission(BaseTestCase, PyTestFixtures):

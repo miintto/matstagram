@@ -1,8 +1,8 @@
-from app.api.user.models import AuthUser
+from app.api.user.models import AuthUser, UserPermission
 from app.api.user.schemas.response import UserResponse, UserProfileResponse
 from app.common.schemas import CommonResponse, SuccessResponse
-from ..management.fixtures import PyTestFixtures
-from ..testcase import BaseTestCase
+from tests.management.fixtures import PyTestFixtures
+from tests.management.testcase import BaseTestCase
 
 
 class TestUser(BaseTestCase, PyTestFixtures):
@@ -109,4 +109,35 @@ class TestUser(BaseTestCase, PyTestFixtures):
             headers={"Authorization": f"JWT {access}"},
         )
         assert response.status_code == 422
+        CommonResponse(**response.json())
+
+    def test_user_profile(self, create_root_user, session):
+        access = create_root_user["data"]["access"]
+        user = AuthUser(user_name="user-2", user_email="user2@test.com")
+        session.add(user)
+        session.commit()
+
+        # 일반 권한으로 사용자 조회
+        response = self.client.get(
+            f"api/user/{user.id}", headers={"Authorization": f"JWT {access}"}
+        )
+        assert response.status_code == 403
+
+        # 관리자 권한으로 사용자 조회
+        user = session.query(AuthUser).filter(
+            AuthUser.user_email == self.fixture_root_email
+        ).one()
+        user.user_permission = UserPermission.admin
+        session.commit()
+        response = self.client.get(
+            f"api/user/{user.id}", headers={"Authorization": f"JWT {access}"}
+        )
+        assert response.status_code == 200
+        UserProfileResponse(**response.json())
+
+        # 없는 사용자 조회
+        response = self.client.get(
+            f"api/user/999", headers={"Authorization": f"JWT {access}"}
+        )
+        assert response.status_code == 404
         CommonResponse(**response.json())

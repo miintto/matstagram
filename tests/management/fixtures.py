@@ -1,7 +1,6 @@
 import pytest
 
 from app.api.user.models import AuthUser
-from app.main import app
 
 
 class PyTestFixtures:
@@ -32,14 +31,3 @@ class PyTestFixtures:
             AuthUser.user_email == self.fixture_root_email
         ).delete()
         session.commit()
-
-    @pytest.fixture()
-    def exclude_middleware(self):
-        """router의 결과로 TemplateResponse 를 반환하는 경우 starlette middleware 에서
-        에러가 발생하므로 임시로 middleware 를 제거 후 테스트 하였습니다."""
-        _user_middleware = app.user_middleware.copy()
-        app.user_middleware = []
-        app.middleware_stack = app.build_middleware_stack()
-        yield
-        app.user_middleware = _user_middleware
-        app.middleware_stack = app.build_middleware_stack()

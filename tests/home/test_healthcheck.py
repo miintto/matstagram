@@ -1,4 +1,4 @@
-from ..testcase import BaseTestCase
+from tests.management.testcase import BaseTestCase
 
 
 class TestHealthCheck(BaseTestCase):
