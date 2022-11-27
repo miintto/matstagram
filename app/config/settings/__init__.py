@@ -1,10 +1,10 @@
-import os
 from functools import lru_cache
-import inspect
 from importlib import import_module
+import inspect
+import os
 
+from app.common.utils import is_test
 from app.config.settings.base import Settings
-from tests.management.utils import is_test
 
 
 __all__ = ["get_settings"]
