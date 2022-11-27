@@ -13,6 +13,7 @@ class User(TypedDict):
     user_name: str
     user_email: EmailStr
     user_permission: UserPermission
+    profile_image: str | None
     is_active: bool
     created_dtm: datetime
     last_login_dtm: datetime | None

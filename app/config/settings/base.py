@@ -5,6 +5,7 @@ from pydantic import BaseSettings
 
 BASE_DIR = str(Path(__file__).parents[3])
 LOG_DIR = os.path.join(BASE_DIR, "logs/")
+STATIC_DIR = os.path.join(BASE_DIR, "static/")
 
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR, exist_ok=True)
@@ -17,6 +18,8 @@ class Settings(BaseSettings):
     DEBUG: str
 
     SECRET_KEY: str
+
+    STATIC_DIR: str = STATIC_DIR
 
     LOG_DIR: str = LOG_DIR
     LOGGING_CONFIG: dict

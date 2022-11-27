@@ -31,6 +31,13 @@ class UserProfile:
         session.commit()
         return user.to_dict()
 
+    def change_image(
+        self, user: AuthUser, profile_image: str, session: Session
+    ) -> dict:
+        user.profile_image = profile_image
+        session.commit()
+        return user.to_dict()
+
     def change_password(
         self, user: AuthUser, body: NewPasswordBody, session: Session
     ) -> bool:

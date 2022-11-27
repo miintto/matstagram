@@ -17,6 +17,9 @@ logs/
 .pytest_cache/
 htmlcov/
 
+# Static Path
+static/img/profile/*
+
 
 # - Editor Setting Files (Pycharm, VSCode ...)
 .idea/

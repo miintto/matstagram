@@ -27,6 +27,9 @@ class Http4XX(Enum):
     MISMATCHED_PASSWORD = (
         "F009", "동일한 비밀번호를 입력하세요.", status.HTTP_422_UNPROCESSABLE_ENTITY
     )
+    INVALID_FILE_FORMAT = (
+        "F010", "올바르지 않은 형식의 파일입니다.", status.HTTP_422_UNPROCESSABLE_ENTITY
+    )
 
 
 class Http5XX(Enum):

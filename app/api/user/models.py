@@ -37,6 +37,7 @@ class AuthUser(Base):
         nullable=False,
         default=UserPermission.normal,
     )
+    profile_image = Column(Text, comment="사용자 프로필 이미지", nullable=True)
     is_active = Column(Boolean, comment="활성화 여부", nullable=False, default=True)
     created_dtm = Column(
         DateTime, comment="생성 일시", nullable=False, default=datetime.utcnow
@@ -60,6 +61,7 @@ class AuthUser(Base):
             "user_name": self.user_name,
             "user_email": self.user_email,
             "user_permission": self.user_permission.name,
+            "profile_image": self.profile_image,
             "is_active": self.is_active,
             "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%H:%S"),
             "last_login_dtm": (
