@@ -1,4 +1,4 @@
-const requestDisplayPlaces = (queryParams) => {
+const requestPlaceList = (queryParams, successFunc) => {
   $.ajax({
     url: "/api/place",
     type: "GET",
@@ -8,20 +8,7 @@ const requestDisplayPlaces = (queryParams) => {
       const token = getAuthToken();
       xhr.setRequestHeader("Authorization", "JWT " + token)
     },
-    success: (data) => {
-      const places = data["data"]
-      var markerSource = new ol.source.Vector();
-      for (let i = 0; i < places.length; i++) {
-        feature = createFeature(places[i])
-        markerSource.addFeature(feature);
-      }
-      markerLayer = new ol.layer.Vector({
-        name: 'Marker',
-        source: markerSource,
-        style: markerStyle,
-      });
-      map.addLayer(markerLayer);
-    },
+    success: successFunc,
     fail: (err) => {
       console.log(err);
     }

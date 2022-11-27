@@ -152,24 +152,45 @@
 .menubar-button {
   display: flex;
   width: 340px;
-  margin: 0px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0px auto;
   padding: 0px;
 }
 
 .menubar-button-section {
+  width: 80px;
   margin-left: 15px;
   margin-right: 15px;
 }
 
-.profile {
-  position: fixed;
+.full {
+  position: absolute;
   top: 0;
   left: 0px;
   right: 0px;
-  height: 100vh;
+  min-height: 100vh;
   background: var(--color-bg-white);
+}
+
+.my-place-component {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.my-place-content {
+  margin-bottom: 100px;
+}
+
+.my-place-title p {
+  margin: 15px;
+  font-size: 24px;
+}
+
+.my-place-button {
+  width: 120px;
+  margin: 10px;
+  border: 1px var(--color-steel-gray) solid;
+  box-shadow: 1px 2px 8px 2px rgba(50,50,50,0.1);
 }
 
 .profile-component {

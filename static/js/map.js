@@ -2,7 +2,7 @@ const map = new ol.Map({
   target: "map",
   layers: [
     new ol.layer.Tile({
-      name: 'Map',
+      name: "Map",
       source: new ol.source.XYZ({
         url: "http://xdworld.vworld.kr:8080/2d/Base/202002/{z}/{x}/{y}.png"
       }),
@@ -34,6 +34,34 @@ const createFeature = (place) => {
   return feature
 };
 
+const displayPlaces = (tags) => {
+  requestPlaceList(
+    queryParams = tags,
+    successFunc = (data) => {
+      const places = data["data"]
+      var markerSource = new ol.source.Vector();
+      for (let i = 0; i < places.length; i++) {
+        feature = createFeature(places[i])
+        markerSource.addFeature(feature);
+      }
+      markerLayer = new ol.layer.Vector({
+        name: "Marker",
+        source: markerSource,
+        style: markerStyle,
+      });
+      map.addLayer(markerLayer);
+    }
+  )
+}
+
+const concatTag = (tagArray) => {
+    let tags = "";
+    tagArray.forEach((e) => {
+      tags = tags + `<p>#` + e.tag_name + `</p>`;
+    });
+    return tags
+}
+
 map.on("click", (e) => {
   var feature = map.forEachFeatureAtPixel(e.pixel, (f) => { return f; });
   if (feature) {
@@ -41,10 +69,7 @@ map.on("click", (e) => {
     $("#filter").hide();
     $("#place-title").html(`<p>` + feature.get("place_name") + `</p>`);
     $("#place-description").html(`<p>` + feature.get("description") + `</p>`);
-    let tags = "";
-    feature.get("tags").forEach((e) => {
-      tags = tags + `<p>#` + e.tag_name + `</p>`;
-    });
+    const tags = concatTag(feature.get("tags"))
     $("#place-tags").html(tags);
   };
 });
@@ -94,25 +119,67 @@ $("#button-apply-filter").click((e) => {
   map.getLayers().getArray()
     .filter(layer => layer.get("name") === "Marker")
     .forEach(layer => map.removeLayer(layer));
-  requestDisplayPlaces({tags: tagList.join(",")});
+  displayPlaces({tags: tagList.join(",")});
   $("#filter").hide();
 });
 
-$("#button-cancel-filter").click((e) => {
-  $("#filter").hide();
-});
+$("#button-cancel-filter").click((e) => { $("#filter").hide(); });
 
-$("#button-logout").click((e) => {
-  window.location.replace("/");
+$("#button-logout").click((e) => { window.location.replace("/"); });
+
+const displayMyPlace = (tags) => {
+  requestPlaceList(
+    queryParams = tags,
+    successFunc = (data) => {
+      const places = data["data"];
+      let placeComponent = "";
+      for (let i = 0; i < places.length; i++) {
+        const tags = concatTag(places[i].tags);
+        placeComponent = placeComponent + `
+        <div class="place-info-component">
+          <div class="place-info-section image-section">
+            <img src="/static/img/place-blank.jpg" width="120">
+          </div>
+          <div class="place-info-section">
+            <div class="place-title">
+              <p>` + places[i].place_name + `</p>
+            </div>
+            <div class="place-description">
+              <p>` + places[i].description + `</p>
+            </div>
+            <div class="place-tags">` + tags + `</div>
+          </div>
+        </div>`
+      }
+      $("#my-place-content").html(placeComponent);
+    }
+  )
+}
+
+$("#button-my-place").click((e) => {
+  $("#filter").hide();
+  $("#place-info").hide();
+  $("#my-place").show();
+  if ($("#my-place-content:has(div)").length === 0) {
+    displayMyPlace({});
+  }
 });
 
 $("#button-profile").click((e) => {
-  $("#filter").hide();
-  $("#place-info").hide();
   $("#profile").show();
+  $("#my-place").css("position", "fixed");
   if ($("#profile-user-name:has(p)").length === 0) {
     requestUserProfile();
   }
 });
 
-$("#button-close-profile").click((e) => { $("#profile").hide(); });
+$("#button-register-place").click((e) => {
+  $("#my-place").hide();
+});
+
+$("#button-close-profile").click((e) => {
+  $("#my-place").css("position", "");
+  $("#profile").hide();
+});
+
+$("#button-close-my-place").click((e) => { $("#my-place").hide(); });
