@@ -8,22 +8,25 @@
 <script src="https://cdn.jsdelivr.net/npm/ol@v7.1.0/dist/ol.js"></script>
 <script src="{{ url_for('static', path='/js/map.js') }}"></script>
 <script src="{{ url_for('static', path='/js/ajax.js') }}"></script>
-<script>requestDisplayPlaces({});</script>
+<script>displayPlaces({});</script>
 {% endblock %}
 
 {% block content %}
 <div id="map" class="map" style="height: 100%; width: 100%;"></div>
 
 <!-- 식당 정보 영역 -->
-{% include "map/place-info.html" %}
+{% include "map/layers/place-info.html" %}
 
 <!-- 하단 메뉴바 영역 -->
-{% include "map/menubar.html" %}
+{% include "map/layers/menubar.html" %}
 
-<!-- 필터 영역 -->
-{% include "map/filter.html" %}
+<!-- 내 장소 리스트 영역 -->
+{% include "map/layers/my-place.html" %}
 
 <!-- 내 정보 영역 -->
-{% include "map/profile.html" %}
+{% include "map/layers/profile.html" %}
+
+<!-- 필터 영역 -->
+{% include "map/layers/filter.html" %}
 
 {% endblock %}

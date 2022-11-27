@@ -21,12 +21,14 @@ def index(request: Request):
 
 @router.get("/map", include_in_schema=False)
 def display_map(request: Request):
-    return template.TemplateResponse("map.html", {"request": request})
+    return template.TemplateResponse("map/map.html", {"request": request})
 
 
 @router.get("/register", include_in_schema=False)
 def register(request: Request):
-    return template.TemplateResponse("register.html", {"request": request})
+    return template.TemplateResponse(
+        "register/register.html", {"request": request}
+    )
 
 
 @router.get("/documents", include_in_schema=False)
@@ -43,4 +45,6 @@ async def documents(request: Request):
                 )
         except Exception as e:
             logger.info(f"인증 실패: {e}")
-    return template.TemplateResponse("documents.html", {"request": request})
+    return template.TemplateResponse(
+        "documents/documents.html", {"request": request}
+    )

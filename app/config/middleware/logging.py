@@ -33,8 +33,8 @@ class LoggingMiddleware:
 
         return "[{key}] - {methed} {path}{query}".format(
             key=str(uuid.uuid4())[:5],
-            methed=scope.get('method'),
-            path=scope.get('path'),
+            methed=scope.get("method"),
+            path=scope.get("path"),
             query=(
                 "?" + scope.get("query_string").decode("utf-8")
                 if scope.get("query_string")

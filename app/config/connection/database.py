@@ -1,5 +1,6 @@
 import logging
 
+from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.orm.session import Session
@@ -16,7 +17,7 @@ class DBConnection:
         self.engine = None
         self._session = None
 
-    def init_app(self) -> None:
+    def create_session(self) -> None:
         self.engine = create_engine(
             url="postgresql://{user}:{password}@{host}:{port}/{name}".format(
                 user=settings.DB_USER,
@@ -31,14 +32,19 @@ class DBConnection:
             sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
         )
 
-    def startup(self):
-        logger.info(f"db.startup - {self.engine.url.render_as_string()}")
-        self.engine.connect()
+    def init_app(self, app: FastAPI):
+        self.create_session()
 
-    def shutdown(self):
-        self._session.close_all()
-        self.engine.dispose()
-        logger.info(f"db.shutdown - {self.engine.url.render_as_string()}")
+        @app.on_event("startup")
+        def startup():
+            logger.info(f"db.startup - {self.engine.url.render_as_string()}")
+            self.engine.connect()
+
+        @app.on_event("shutdown")
+        def shutdown():
+            self._session.close_all()
+            self.engine.dispose()
+            logger.info(f"db.shutdown - {self.engine.url.render_as_string()}")
 
     def get_session(self) -> Session:
         session = self._session()

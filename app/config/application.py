@@ -24,13 +24,11 @@ def create_app():
         redoc_url="/documents",
         middleware=[Middleware(LoggingMiddleware)],
         exception_handlers=exception_handlers,
-        on_startup=[db.startup],
-        on_shutdown=[db.shutdown],
         env=settings.APP_ENV,
     )
 
     # Databases
-    db.init_app()
+    db.init_app(app)
 
     # Loggings
     logging.config.dictConfig(settings.LOGGING_CONFIG)
