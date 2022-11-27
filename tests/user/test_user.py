@@ -1,3 +1,8 @@
+import io
+import os
+
+from PIL import Image
+
 from app.api.user.models import AuthUser, UserPermission
 from app.api.user.schemas.response import UserResponse, UserProfileResponse
 from app.common.schemas import CommonResponse, SuccessResponse
@@ -77,6 +82,36 @@ class TestUser(BaseTestCase, PyTestFixtures):
         response = self.client.patch(
             "api/user",
             json={"user_name": "new-name", "user_email": "user1@test.com"},
+            headers={"Authorization": f"JWT {access}"},
+        )
+        assert response.status_code == 422
+        CommonResponse(**response.json())
+
+    def test_user_profile_image(self, create_root_user, session):
+        access = create_root_user["data"]["access"]
+
+        file = io.BytesIO()
+        image = Image.new("RGBA", size=(5, 5), color=(0, 0, 0))
+        image.save(file, "png")
+
+        # 업로드 테스트
+        response = self.client.patch(
+            "api/user/image",
+            files={'profile_image': ("test222.png", file, "image/png")},
+            headers={"Authorization": f"JWT {access}"},
+        )
+        assert response.status_code == 200
+        user = session.query(AuthUser).filter(
+            AuthUser.user_email == self.fixture_root_email
+        ).one()
+        assert user.profile_image is not None
+        result = UserResponse(**response.json())
+        os.remove(f".{result.data['profile_image']}")
+
+        # 유효한 media-type 이 아니면 에러
+        response = self.client.patch(
+            "api/user/image",
+            files={'profile_image': ("dump", io.BytesIO(), "image/svg+xml")},
             headers={"Authorization": f"JWT {access}"},
         )
         assert response.status_code == 422

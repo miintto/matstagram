@@ -35,7 +35,7 @@ class TestTag(BaseTestCase, PyTestFixtures):
         result = TagCreatedResponse(**response.json())
 
         # 태그 수정
-        tag_id = result.data.get('id')
+        tag_id = result.data.get("id")
         new_tag_name = "태그2-수정"
         response = self.client.post(
             f"/api/tag/{tag_id}",
