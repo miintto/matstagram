@@ -3,8 +3,17 @@
     <div class="profile-header">
       <div id="profile-update" class="profile-update center">수정</div>
     </div>
-    <div id="profile-image" class="profile-image">
-      <img src="{{ url_for('static', path='/img/place-blank.jpg') }}" width="200">
+    <div class="profile-image">
+      <div id="profile-image-section" class="profile-image-section image-absolute">
+        <img src="{{ url_for('static', path='/img/place-blank.jpg') }}" width="200">
+      </div>
+      <div id="profile-image-section-blur" class="profile-image-section-blur image-absolute center" style="display:none">
+        <p>프로필 이미지 변경</p>
+      </div>
+      <div id="profile-image-section-preview" class="profile-image-section image-absolute" style="display:none"></div>
+      <div class="profile-image-upload" style="display:none">
+        <input type="file" id="upload-profile-image" accept="image/*">
+      </div>
     </div>
     <div class="profile-content">
       <div class="profile-section">

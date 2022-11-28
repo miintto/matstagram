@@ -227,15 +227,37 @@
 }
 
 .profile-image {
+  position: relative;
   width: 200px;
+  height: 200px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
 }
 
-.profile-image img {
+.image-absolute {
+  position: absolute;
+  top: 20px;
+}
+
+.profile-image-section img {
   width: 200px;
+  max-height: 200px;
   border-radius: 100px;
+}
+
+.profile-image-section-blur {
+  width: 200px;
+  height: 200px;
+  background: rgba(245,245,245,0.7);
+  cursor: pointer;
+}
+
+.profile-image-section-blur p {
+  margin: 0px;
+  font-size: 20px;
+  line-height: 200px;
+  color: var(--color-shadow-gray);
 }
 
 .profile-content {
@@ -278,7 +300,7 @@
 }
 
 .profile-tag-content {
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
 
 .profile-tag-title p {
