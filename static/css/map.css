@@ -5,7 +5,7 @@
   left: 0px;
   right: 0px;
   width: 100%;
-  height: 240px;
+  height: 200px;
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
@@ -171,14 +171,11 @@
   background: var(--color-bg-white);
 }
 
+/* my place */
 .my-place-component {
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
-}
-
-.my-place-content {
-  margin-bottom: 100px;
 }
 
 .my-place-title p {
@@ -193,11 +190,40 @@
   box-shadow: 1px 2px 8px 2px rgba(50,50,50,0.1);
 }
 
+.my-place-content {
+  margin-bottom: 100px;
+}
+
+.my-place-blank {
+  padding: 120px 0px;
+}
+
+.my-place-blank p {
+  margin: 0px;
+  color: var(--color-gray);
+  font-size: 40px;
+}
+
+/* profile */
 .profile-component {
   max-width: 320px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
+}
+
+.profile-header {
+  height: 28px;
+}
+
+.profile-update {
+  width: 60px;
+  height: 28px;
+  margin-left: auto;
+  color: var(--color-gray);
+  font-size: 16px;
+  line-height: 28px;
+  cursor: pointer;
 }
 
 .profile-image {
@@ -208,6 +234,7 @@
 }
 
 .profile-image img {
+  width: 200px;
   border-radius: 100px;
 }
 
@@ -228,18 +255,37 @@
 }
 
 .profile-text p {
-  height: 40px;
+  height: 36px;
   margin: 0px;
   padding: 0px 10px;
   font-size: 18px;
-  line-height: 40px;
+  line-height: 36px;
+}
+
+.profile-update-value {
+  height: 32px;
+  background: var(--color-white);
+  border-radius: .5em;
+}
+
+.profile-update-value input {
+  height: 28px;
+  margin: 2px 5px;
+  border: 0px;
+  background: var(--color-white);
+  font-size: 16px;
+  outline-style: none;
+}
+
+.profile-tag-content {
+  margin-bottom: 100px;
 }
 
 .profile-tag-title p {
   font-size: 16px;
 }
 
-.profile-bottom-component {
+.bottom-component {
   position: fixed;
   bottom: 0px;
   left: 0px;
@@ -247,12 +293,11 @@
   height: 50px;
 }
 
-.profile-exit {
-  max-width: 200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .profile-button-section {
   width: 200px;
+}
+
+.profile-update-button-section {
+  width: 120px;
+  margin: 0px 10px;
 }

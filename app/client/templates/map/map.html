@@ -6,19 +6,21 @@
 
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/ol@v7.1.0/dist/ol.js"></script>
-<script src="{{ url_for('static', path='/js/map.js') }}"></script>
-<script src="{{ url_for('static', path='/js/ajax.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/filter.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/profile.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/myPlace.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/map.js') }}"></script>
 <script>displayPlaces({});</script>
 {% endblock %}
 
 {% block content %}
 <div id="map" class="map" style="height: 100%; width: 100%;"></div>
 
-<!-- 식당 정보 영역 -->
-{% include "map/layers/place-info.html" %}
-
 <!-- 하단 메뉴바 영역 -->
 {% include "map/layers/menubar.html" %}
+
+<!-- 식당 정보 영역 -->
+{% include "map/layers/place-info.html" %}
 
 <!-- 내 장소 리스트 영역 -->
 {% include "map/layers/my-place.html" %}

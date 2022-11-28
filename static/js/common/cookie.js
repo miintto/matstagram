@@ -10,7 +10,7 @@ const getCookie = (key) => {
     x = val[i].substr(0, val[i].indexOf("="));
     y = val[i].substr(val[i].indexOf("=") + 1);
     x = x.replace(/^\s+|\s+$/g, "");
-    if (x == key) {
+    if (x === key) {
       return unescape(y);
     }
   }

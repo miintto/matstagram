@@ -1,6 +1,9 @@
 <div id="profile" class="profile full" style="display:none">
   <div class="profile-component">
-    <div class="profile-image">
+    <div class="profile-header">
+      <div id="profile-update" class="profile-update center">수정</div>
+    </div>
+    <div id="profile-image" class="profile-image">
       <img src="{{ url_for('static', path='/img/place-blank.jpg') }}" width="200">
     </div>
     <div class="profile-content">
@@ -8,13 +11,19 @@
         <div class="profile-name profile-text">
           <p>이름</p>
         </div>
-        <div id="profile-user-name" class="profile-value profile-text"></div>
+        <div id="profile-user-name" class="profile-value profile-value-updatable profile-text"></div>
+        <div class="profile-update-value" style="display:none">
+          <input id="input-profile-user-name" type="text">
+        </div>
       </div>
       <div class="profile-section">
         <div class="profile-name profile-text">
           <p>이메일</p>
         </div>
-        <div id="profile-user-email" class="profile-value profile-text"></div>
+        <div id="profile-user-email" class="profile-value profile-value-updatable profile-text"></div>
+        <div class="profile-update-value" style="display:none">
+          <input id="input-profile-user-email" type="email">
+        </div>
       </div>
       <div class="profile-section">
         <div class="profile-name profile-text">
@@ -36,10 +45,18 @@
       <div id="profile-tag-list" class="tag-content-flex"></div>
     </div>
   </div>
-  <div class="profile-bottom-component">
-    <div class="profile-exit">
+  <div class="bottom-component">
+    <div id="profile-close-section" class="profile-close-section center">
       <div class="profile-button-section button-common button-black">
         <div id="button-close-profile">돌아가기</div>
+      </div>
+    </div>
+    <div id="profile-update-section" class="profile-update-section center" style="display:none">
+      <div class="profile-update-button-section button-common button-gray">
+        <div id="button-cancel-update">취소</div>
+      </div>
+      <div class="profile-update-button-section button-common button-black">
+        <div id="button-save-profile">저장</div>
       </div>
     </div>
   </div>

@@ -18,7 +18,7 @@ class BaseUpload:
         self.static_dir = settings.STATIC_DIR
         self.upload_to = ""
 
-    def upload(self, file: UploadFile, file_name: str):
+    def upload(self, file: UploadFile, file_name: str) -> str:
         self.validate(file)
         file_path = os.path.join(self.static_dir, self.upload_to, file_name)
         with open(file_path, "wb+") as f:

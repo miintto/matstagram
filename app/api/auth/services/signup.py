@@ -11,14 +11,14 @@ from ..schemas import SignUpBody
 class SignUp:
     @staticmethod
     def _validate(body: SignUpBody, session: Session):
-        if body.password != body.password_check:
-            raise APIException(Http4XX.MISMATCHED_PASSWORD)
         if session.query(AuthUser).filter(
             AuthUser.user_email == body.user_email
         ).first():
             raise APIException(
                 Http4XX.DUPLICATED_USER_EMAIL, data=body.user_email
             )
+        if body.password != body.password_check:
+            raise APIException(Http4XX.MISMATCHED_PASSWORD)
 
     @staticmethod
     def _create_user(body: SignUpBody, session: Session) -> AuthUser:

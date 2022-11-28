@@ -54,7 +54,7 @@ async def change_my_info(
 ) -> APIResponse:
     """내 정보 수정"""
     return APIResponse(
-        Http2XX.SUCCESS, data=UserProfile().update(user, body, session)
+        Http2XX.SUCCESS, data=await UserProfile().update(user, body, session)
     )
 
 

@@ -7,27 +7,27 @@ from ..schemas.request import NewPasswordBody, UserInfoBody
 
 
 class UserProfile:
-    def _validate_user_name(self, user_name: str, session: Session) -> bool:
+    def _validate_user_name(self, user_name: str, user_pk: int, session: Session) -> bool:
         if session.query(AuthUser).filter(
-            AuthUser.user_name == user_name
+            AuthUser.user_name == user_name, AuthUser.id != user_pk
         ).first():
             raise APIException(Http4XX.DUPLICATED_USER_NAME, data=user_name)
         return True
 
-    def _validate_user_email(self, user_email: str, session: Session) -> bool:
+    def _validate_user_email(self, user_email: str, user_pk: int, session: Session) -> bool:
         if session.query(AuthUser).filter(
-            AuthUser.user_email == user_email
+            AuthUser.user_email == user_email, AuthUser.id != user_pk
         ).first():
             raise APIException(Http4XX.DUPLICATED_USER_EMAIL, data=user_email)
         return True
 
-    def update(
+    async def update(
         self, user: AuthUser, body: UserInfoBody, session: Session
     ) -> dict:
-        if self._validate_user_name(body.user_name, session):
-            user.user_name = body.user_name
-        if self._validate_user_email(body.user_email, session):
-            user.user_email = body.user_email
+        self._validate_user_name(body.user_name, user.id, session)
+        self._validate_user_email(body.user_email, user.id, session)
+        user.user_name = body.user_name
+        user.user_email = body.user_email
         session.commit()
         return user.to_dict()
 
