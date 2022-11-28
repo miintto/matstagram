@@ -5,7 +5,7 @@ from pydantic import EmailStr
 
 from app.api.place.schemas.resopnse import Tag
 from app.api.user.models import UserPermission
-from app.common.schemas import SuccessResponse
+from app.common.schemas import CreatedResponse, SuccessResponse
 
 
 class User(TypedDict):
@@ -33,3 +33,9 @@ class UserProfileResponse(SuccessResponse):
     """사용자 응답"""
 
     data: UserProfile
+
+
+class ImageUploadResponse(CreatedResponse):
+    """이미지 업로드 성공 응답"""
+
+    data: str

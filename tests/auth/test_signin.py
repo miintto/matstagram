@@ -28,7 +28,7 @@ class TestSignUp(BaseTestCase, PyTestFixtures):
         """회원가입 중복된 이메일"""
         response = self._request_signup(
             body={
-                "user_email": "matstagram@test.com",
+                "user_email": self.fixture_root_email,
                 "password": "1234",
                 "password_check": "1234",
             },
@@ -40,7 +40,7 @@ class TestSignUp(BaseTestCase, PyTestFixtures):
         """회원가입 비밀번호 불일치"""
         response = self._request_signup(
             body={
-                "user_email": "test@test.com",
+                "user_email": "test2@test.com",
                 "password": "1234",
                 "password_check": "123456",
             },

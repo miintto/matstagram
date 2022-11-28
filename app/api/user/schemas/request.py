@@ -4,6 +4,7 @@ from pydantic import BaseModel, EmailStr
 class UserInfoBody(BaseModel):
     user_name: str
     user_email: EmailStr
+    profile_image: str | None
 
 
 class NewPasswordBody(BaseModel):

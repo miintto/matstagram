@@ -7,14 +7,18 @@ from ..schemas.request import NewPasswordBody, UserInfoBody
 
 
 class UserProfile:
-    def _validate_user_name(self, user_name: str, user_pk: int, session: Session) -> bool:
+    def _validate_user_name(
+        self, user_name: str, user_pk: int, session: Session
+    ) -> bool:
         if session.query(AuthUser).filter(
             AuthUser.user_name == user_name, AuthUser.id != user_pk
         ).first():
             raise APIException(Http4XX.DUPLICATED_USER_NAME, data=user_name)
         return True
 
-    def _validate_user_email(self, user_email: str, user_pk: int, session: Session) -> bool:
+    def _validate_user_email(
+        self, user_email: str, user_pk: int, session: Session
+    ) -> bool:
         if session.query(AuthUser).filter(
             AuthUser.user_email == user_email, AuthUser.id != user_pk
         ).first():
@@ -28,13 +32,8 @@ class UserProfile:
         self._validate_user_email(body.user_email, user.id, session)
         user.user_name = body.user_name
         user.user_email = body.user_email
-        session.commit()
-        return user.to_dict()
-
-    def change_image(
-        self, user: AuthUser, profile_image: str, session: Session
-    ) -> dict:
-        user.profile_image = profile_image
+        if body.profile_image:
+            user.profile_image = body.profile_image
         session.commit()
         return user.to_dict()
 
@@ -48,4 +47,3 @@ class UserProfile:
         user.set_password(body.new_password)
         session.commit()
         return True
-

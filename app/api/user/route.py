@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile
+from fastapi import APIRouter, Depends
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
@@ -15,7 +15,11 @@ from app.common.upload import upload_profile_image
 from app.config.connection import db
 from .models import AuthUser
 from .schemas.request import NewPasswordBody, UserInfoBody
-from .schemas.response import UserResponse, UserProfileResponse
+from .schemas.response import (
+    ImageUploadResponse,
+    UserResponse,
+    UserProfileResponse,
+)
 from .services.user_profile import UserProfile
 
 router = APIRouter(prefix="/user", tags=["User"])
@@ -58,26 +62,23 @@ async def change_my_info(
     )
 
 
-@router.patch(
+@router.post(
     "/image",
-    response_model=UserResponse,
+    response_model=ImageUploadResponse,
+    status_code=201,
     responses={
-        200: {"description": "이미지 변경 성공."},
-        400: {"description": "정보 수정 실패.", "model": CommonResponse},
+        201: {"description": "이미지 업로드 성공."},
+        400: {"description": "업로드 실패.", "model": CommonResponse},
         401: {"description": "인증 실패", "model": UnauthenticatedResponse},
         403: {"description": "권한 없음", "model": PermissionDeniedResponse},
     },
 )
-async def change_my_profile_image(
+async def upload_profile_image(
     profile_image: str = Depends(upload_profile_image),
     user: AuthUser = Depends(IsNormalUser()),
-    session: Session = Depends(db.session),
 ) -> APIResponse:
-    """내 프로필 이미지 수정"""
-    return APIResponse(
-        Http2XX.SUCCESS,
-        data=UserProfile().change_image(user, profile_image, session)
-    )
+    """프로필 이미지 업로드"""
+    return APIResponse(Http2XX.CREATED, data=profile_image)
 
 
 @router.patch(

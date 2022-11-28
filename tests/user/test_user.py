@@ -4,7 +4,11 @@ import os
 from PIL import Image
 
 from app.api.user.models import AuthUser, UserPermission
-from app.api.user.schemas.response import UserResponse, UserProfileResponse
+from app.api.user.schemas.response import (
+    ImageUploadResponse,
+    UserResponse,
+    UserProfileResponse,
+)
 from app.common.schemas import CommonResponse, SuccessResponse
 from tests.management.fixtures import PyTestFixtures
 from tests.management.testcase import BaseTestCase
@@ -95,21 +99,18 @@ class TestUser(BaseTestCase, PyTestFixtures):
         image.save(file, "png")
 
         # 업로드 테스트
-        response = self.client.patch(
+        response = self.client.post(
             "api/user/image",
             files={'profile_image': ("test222.png", file, "image/png")},
             headers={"Authorization": f"JWT {access}"},
         )
-        assert response.status_code == 200
-        user = session.query(AuthUser).filter(
-            AuthUser.user_email == self.fixture_root_email
-        ).one()
-        assert user.profile_image is not None
-        result = UserResponse(**response.json())
-        os.remove(f".{result.data['profile_image']}")
+        assert response.status_code == 201
+        result = ImageUploadResponse(**response.json())
+        assert os.path.exists(f".{result.data}")
+        os.remove(f".{result.data}")
 
         # 유효한 media-type 이 아니면 에러
-        response = self.client.patch(
+        response = self.client.post(
             "api/user/image",
             files={'profile_image': ("dump", io.BytesIO(), "image/svg+xml")},
             headers={"Authorization": f"JWT {access}"},
