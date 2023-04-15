@@ -40,7 +40,7 @@ class Place(Base):
             "lat": self.lat,
             "lng": self.lng,
             "address": self.address,
-            "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%H:%S.%f"),
+            "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%M:%S.%f"),
         }
 
 
@@ -60,7 +60,7 @@ class Tag(Base):
             "id": self.id,
             "tag_name": self.tag_name,
             "memo": self.memo,
-            "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%H:%S.%f"),
+            "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%M:%S.%f"),
         }
 
 

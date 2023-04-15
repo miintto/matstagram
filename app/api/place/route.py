@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.api.user.models import AuthUser
@@ -28,6 +28,7 @@ router = APIRouter(tags=["Place"])
 
 @router.get(
     "/place/{pk}",
+    summary="맛집 정보 조회",
     response_model=PlaceResponse,
     responses={
         200: {"description": "조회 성공."},
@@ -41,7 +42,9 @@ async def get_place(
     user: AuthUser = Depends(IsNormalUser()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """장소 정보"""
+    """
+    특정 맛집에 대한 상세 정보를 반환합니다.
+    """
     return APIResponse(
         Http2XX.SUCCESS, data=PlaceManager().get_place(user, pk, session)
     )
@@ -49,6 +52,7 @@ async def get_place(
 
 @router.get(
     "/place",
+    summary="맛집 리스트 조회",
     response_model=PlaceListResponse,
     responses={
         200: {"description": "조회 성공."},
@@ -57,11 +61,17 @@ async def get_place(
     },
 )
 async def get_place_list(
-    tags: str | None = None,
+    tags: str | None = Query(
+        title="태그 id",
+        description="특정 태그가 달린 맛집들만 조회하는 경우에만 사용합니다.",
+        default=None,
+    ),
     user: AuthUser = Depends(IsAuthenticated()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """장소 리스트"""
+    """
+    사용자가 등록한 맛집 리스트를 조회합니다.
+    """
     return APIResponse(
         Http2XX.SUCCESS,
         data=PlaceManager().get_place_list(user, tags, session),
@@ -70,6 +80,7 @@ async def get_place_list(
 
 @router.post(
     "/place",
+    summary="맛집 등록",
     response_model=PlaceCreatedResponse,
     status_code=201,
     responses={
@@ -84,7 +95,7 @@ async def register_place(
     user: AuthUser = Depends(IsNormalUser()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """장소 등록"""
+    """맛집을 등록합니다."""
     return APIResponse(
         Http2XX.CREATED, data=PlaceManager().register(user, body, session)
     )
@@ -92,6 +103,7 @@ async def register_place(
 
 @router.get(
     "/tag",
+    summary="태그 리스트 조회",
     response_model=TagListResponse,
     responses={
         200: {"description": "조회 성공."},
@@ -103,7 +115,11 @@ async def tag_list(
     user: AuthUser = Depends(IsAuthenticated()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """태그 리스트"""
+    """
+    사용자가 등록한 태그 목록을 조회합니다.
+
+    만일 등록돤 태그가 하나도 없는 경우 `data` 의 반환값으로 빈 array (`[]`) 를 반환합니다.
+    """
     return APIResponse(
         Http2XX.SUCCESS, data=TagHandler.get_user_tag_list(user, session)
     )
@@ -111,6 +127,7 @@ async def tag_list(
 
 @router.post(
     "/tag",
+    summary="태그 생성",
     response_model=TagCreatedResponse,
     status_code=201,
     responses={
@@ -124,7 +141,9 @@ async def create_tag(
     user: AuthUser = Depends(IsNormalUser()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """태그 생성"""
+    """
+    태그 정보를 입력받아 사용자의 태그를 생성합니다.
+    """
     return APIResponse(
         Http2XX.CREATED, data=TagHandler().create(user, body, session)
     )
@@ -132,6 +151,7 @@ async def create_tag(
 
 @router.post(
     "/tag/{pk}",
+    summary="태그 수정",
     response_model=TagResponse,
     responses={
         200: {"description": "태그 수정 성공."},
@@ -146,7 +166,9 @@ async def update_tag(
     user: AuthUser = Depends(IsNormalUser()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """태그 수정"""
+    """
+    태그 정보를 수정합니다.
+    """
     return APIResponse(
         Http2XX.SUCCESS, data=TagHandler().update(user, pk, body, session)
     )

@@ -12,7 +12,7 @@
 
 {% block content %}
 <div class="document-content">
-  <div class="content-head">
+  <div class="content-head center">
     <div class="document-title">
       <p>API 문서</p>
     </div>
@@ -20,22 +20,22 @@
       <p>Redoc 기반의 API 문서를 확인할 수 있습니다.</p>
     </div>
   </div>
-  <div class="main-container">
+  <div class="main-container margin-auto">
     <div class="input-section">
-      <input id="input-user-email" class="input-placeholder" type="email" placeholder="E-mail" onkeyup="onkeyupLogin()" name="userEmail">
+      <input id="input-user-email" type="email" placeholder="E-mail" onkeyup="onkeyupLogin()">
     </div>
     <div class="input-section">
-      <input id="input-password" class="input-placeholder" type="password" placeholder="Password" onkeyup="onkeyupLogin()" name="password">
+      <input id="input-password" type="password" placeholder="Password" onkeyup="onkeyupLogin()">
     </div>
-    <div class="message-section">
+    <div class="message-section center">
       <div class="exception-message"></div>
     </div>
-    <div class="button-section-flex">
+    <div class="button-section center">
       <div class="submit-button button-gray submit-button-small">
-        <a href="/" type="button">돌아가기</a>
+        <div id="button-document-back">돌아가기</div>
       </div>
       <div class="submit-button button-black submit-button-small">
-        <a onclick="submitDocumentLogin()" type="button">로그인</a>
+        <div id="button-login-document">로그인</div>
       </div>
     </div>
   </div>

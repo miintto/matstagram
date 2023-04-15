@@ -27,6 +27,7 @@ router = APIRouter(prefix="/user", tags=["User"])
 
 @router.get(
     "",
+    summary="내 정보 조회",
     response_model=UserProfileResponse,
     responses={
         200: {"description": "조회 성공."},
@@ -37,12 +38,15 @@ router = APIRouter(prefix="/user", tags=["User"])
 async def get_my_profile(
     user: AuthUser = Depends(IsNormalUser())
 ) -> APIResponse:
-    """내 정보 조회"""
+    """
+    사용자의 이메일, 이름, 권한 등의 정보를 조회합니다.
+    """
     return APIResponse(Http2XX.SUCCESS, data=user.to_dict(load=True))
 
 
 @router.patch(
     "",
+    summary="내 정보 수정",
     response_model=UserResponse,
     responses={
         200: {"description": "정보 수정 성공."},
@@ -56,7 +60,6 @@ async def change_my_info(
     user: AuthUser = Depends(IsNormalUser()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """내 정보 수정"""
     return APIResponse(
         Http2XX.SUCCESS, data=await UserProfile().update(user, body, session)
     )
@@ -64,6 +67,7 @@ async def change_my_info(
 
 @router.post(
     "/image",
+    summary="프로필 이미지 업로드",
     response_model=ImageUploadResponse,
     status_code=201,
     responses={
@@ -77,12 +81,12 @@ async def upload_profile_image(
     profile_image: str = Depends(upload_profile_image),
     user: AuthUser = Depends(IsNormalUser()),
 ) -> APIResponse:
-    """프로필 이미지 업로드"""
     return APIResponse(Http2XX.CREATED, data=profile_image)
 
 
 @router.patch(
     "/password",
+    summary="비밀번호 변경",
     response_model=SuccessResponse,
     responses={
         200: {"description": "비밀번호 변경 성공."},
@@ -96,7 +100,6 @@ async def change_password(
     user: AuthUser = Depends(IsNormalUser()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """비밀번호 변경"""
     return APIResponse(
         Http2XX.SUCCESS,
         data=UserProfile().change_password(user, body, session),
@@ -105,6 +108,7 @@ async def change_password(
 
 @router.get(
     "/{pk}",
+    summary="사용자 정보 조회",
     response_model=UserProfileResponse,
     responses={
         200: {"description": "조회 성공."},
@@ -118,7 +122,11 @@ async def get_user_profile(
     user: AuthUser = Depends(AdminOnly()),
     session: Session = Depends(db.session),
 ) -> APIResponse:
-    """사용자 정보 조회"""
+    """
+    특정 사용자의 정보를 조회합니다.
+
+    관리자 권한으로 호출하는 경우만 조회가 가능합니다.
+    """
     try:
         user = session.query(AuthUser).filter(AuthUser.id == pk).one()
     except NoResultFound:

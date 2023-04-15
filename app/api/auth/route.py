@@ -14,6 +14,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 @router.post(
     "/signup",
+    summary="회원 가입",
     response_model=TokenResponse,
     responses={
         200: {"description": "성공."},
@@ -23,12 +24,19 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 async def sign_up(
     body: SignUpBody, session: Session = Depends(db.session)
 ) -> APIResponse:
-    """회원 가입"""
+    """
+    정보를 입력받아 새로운 계정을 생성합니다.
+
+    - [제약 조건]
+        - 다른 사용자와 중복된 이메일은 사용할 수 없습니다.
+        - 비밀번호는 숫자, 영문 대/소문자의 조합으로 길이는 8~20자 사이로 설정합니다.
+    """
     return APIResponse(Http2XX.SUCCESS, data=SignUp().run(body, session))
 
 
 @router.post(
     "/login",
+    summary="로그인",
     response_model=TokenResponse,
     responses={
         200: {"description": "성공."},
@@ -40,5 +48,7 @@ async def sign_up(
 async def log_in(
     body: LogInBody, session: Session = Depends(db.session)
 ) -> APIResponse:
-    """로그인"""
+    """
+    계정 정보를 입력받아서 일치하는 계정이 존재하면 인증 토큰을 반환합니다.
+    """
     return APIResponse(Http2XX.SUCCESS, data=LogIn().run(body, session))

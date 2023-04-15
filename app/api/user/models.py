@@ -63,9 +63,9 @@ class AuthUser(Base):
             "user_permission": self.user_permission.name,
             "profile_image": self.profile_image,
             "is_active": self.is_active,
-            "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%H:%S"),
+            "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%M:%S.%f"),
             "last_login_dtm": (
-                self.last_login_dtm.strftime("%Y-%m-%d %H:%H:%S")
+                self.last_login_dtm.strftime("%Y-%m-%d %H:%M:%S.%f")
                 if self.last_login_dtm
                 else None
             ),

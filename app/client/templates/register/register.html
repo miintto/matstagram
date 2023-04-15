@@ -11,30 +11,30 @@
 
 {% block content %}
 <div class="content">
-  <div class="content-head">
+  <div class="content-head center">
     <div class="register-title">
       <p>가입하기</p>
     </div>
   </div>
-  <div class="main-container">
+  <div class="main-container margin-auto">
     <div class="input-section">
-      <input id="input-user-email" class="input-placeholder" type="email" placeholder="E-mail" onkeyup="onkeyupRegister()" name="userEmail">
+      <input id="input-user-email" type="email" placeholder="E-mail" onkeyup="onkeyupRegister()">
     </div>
     <div class="input-section">
-      <input id="input-password" class="input-placeholder" type="password" placeholder="Password" onkeyup="onkeyupRegister()" name="password">
+      <input id="input-password" type="password" placeholder="Password" onkeyup="onkeyupRegister()">
     </div>
     <div class="input-section">
-      <input id="input-password-check" class="input-placeholder" type="password" placeholder="Password Again" onkeyup="onkeyupRegister()" name="password">
+      <input id="input-password-check" type="password" placeholder="Password Again" onkeyup="onkeyupRegister()">
     </div>
-    <div class="message-section">
+    <div class="message-section center">
       <div class="exception-message"></div>
     </div>
-    <div class="button-section-flex">
+    <div class="button-section center">
       <div class="submit-button button-gray submit-button-small">
-        <a href="/" type="button">돌아가기</a>
+        <div id="button-register-back">돌아가기</div>
       </div>
       <div class="submit-button button-black submit-button-small">
-        <a onclick="submitRegister()" type="button">가입</a>
+        <div id="button-submit-register">가입</div>
       </div>
     </div>
   </div>

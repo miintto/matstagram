@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="content">
-  <div class="content-head">
+  <div class="content-head center">
     <div class="title">
       <h1>맛스타그램</h1>
     </div>
@@ -19,27 +19,27 @@
       <p>지도에서 나만의 맛집을 추가하고 관리하자!</p>
     </div>
   </div>
-  <div class="main-container">
+  <div class="main-container margin-auto">
     <div class="input-section">
-      <input id="input-user-email" class="input-placeholder" type="email" placeholder="E-mail" onkeyup="onkeyupLogin()" name="userEmail">
+      <input id="input-user-email" type="email" placeholder="E-mail" onkeyup="onkeyupLogin()">
     </div>
     <div class="input-section">
-      <input id="input-password" class="input-placeholder" type="password" placeholder="Password" onkeyup="onkeyupLogin()" name="password">
+      <input id="input-password" type="password" placeholder="Password" onkeyup="onkeyupLogin()">
     </div>
-    <div class="message-section">
+    <div class="message-section center">
       <div class="exception-message"></div>
     </div>
-    <div class="button-section">
+    <div class="button-section center">
       <div class="submit-button button-black submit-button-long">
-        <a onclick="submitLogin()" type="button">로그인</a>
+        <div id="button-home-login">로그인</div>
       </div>
     </div>
   </div>
-  <div class="signup-container">
-    <div class="signup-section">
+  <div class="redirect-container margin-auto">
+    <div class="link-section">
       <a href="/register">아직 계정이 없으신가요?</a>
     </div>
-    <div class="signup-section">
+    <div class="link-section">
       <a href="/map">둘러보기</a>
     </div>
   </div>
