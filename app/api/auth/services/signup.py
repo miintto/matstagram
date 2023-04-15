@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.user.models import AuthUser, UserPermission
 from app.common.exception import APIException
@@ -10,10 +11,11 @@ from ..schemas import SignUpBody
 
 class SignUp:
     @staticmethod
-    def _validate(body: SignUpBody, session: Session):
-        if session.query(AuthUser).filter(
-            AuthUser.user_email == body.user_email
-        ).first():
+    async def _validate(body: SignUpBody, session: AsyncSession):
+        result = await session.execute(
+            select(AuthUser).where(AuthUser.user_email == body.user_email)
+        )
+        if result.scalars().first():
             raise APIException(
                 Http4XX.DUPLICATED_USER_EMAIL, data=body.user_email
             )
@@ -21,7 +23,9 @@ class SignUp:
             raise APIException(Http4XX.MISMATCHED_PASSWORD)
 
     @staticmethod
-    def _create_user(body: SignUpBody, session: Session) -> AuthUser:
+    async def _create_user(
+        body: SignUpBody, session: AsyncSession
+    ) -> AuthUser:
         user = AuthUser(
             user_name=body.user_email,
             user_email=body.user_email,
@@ -29,7 +33,7 @@ class SignUp:
         )
         user.set_password(body.password)
         session.add(user)
-        session.commit()
+        await session.flush()
         return user
 
     @staticmethod
@@ -40,7 +44,9 @@ class SignUp:
             "refresh": handler.generate_refresh_token(user),
         }
 
-    def run(self, body: SignUpBody, session: Session) -> ResultDict:
-        self._validate(body, session)
-        user = self._create_user(body, session)
-        return self._generate_token(user)
+    async def run(self, body: SignUpBody, session: AsyncSession) -> ResultDict:
+        await self._validate(body, session)
+        user = await self._create_user(body, session)
+        token = self._generate_token(user)
+        await session.commit()
+        return token

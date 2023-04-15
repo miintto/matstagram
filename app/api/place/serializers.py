@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from sqlalchemy.engine.row import Row
 
 from app.common.types import ResultList
@@ -5,7 +7,7 @@ from .models import Place
 
 
 class PlaceSerializer:
-    def __init__(self, data: list[Row]):
+    def __init__(self, data: Sequence[Row]):
         self.data = data
         self.place_id = -1
         self.tag_list = []

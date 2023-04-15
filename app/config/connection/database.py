@@ -1,9 +1,13 @@
+from asyncio import current_task
 import logging
 
-from fastapi import FastAPI
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.orm.session import Session
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_scoped_session,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 from app.config.settings import get_settings
 
@@ -17,9 +21,9 @@ class DBConnection:
         self.engine = None
         self._session = None
 
-    def create_session(self) -> None:
-        self.engine = create_engine(
-            url="postgresql://{user}:{password}@{host}:{port}/{name}".format(
+    def create_session(self) -> AsyncEngine:
+        return create_async_engine(
+            url="postgresql+asyncpg://{user}:{password}@{host}:{port}/{name}".format(
                 user=settings.DB_USER,
                 password=settings.DB_PASSWORD,
                 host=settings.DB_HOST,
@@ -28,30 +32,29 @@ class DBConnection:
             ),
             pool_size=settings.SQLALCHEMY_POOL_SIZE,
         )
-        self._session = scoped_session(
-            sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
+
+    def init_app(self):
+        self.engine = self.create_session()
+        self._session = async_scoped_session(
+            session_factory=async_sessionmaker(
+                bind=self.engine,
+                autocommit=False,
+                autoflush=False,
+            ),
+            scopefunc=current_task,
         )
 
-    def init_app(self, app: FastAPI):
-        self.create_session()
+    async def dispose_connection(self):
+        await self.engine.dispose()
+        logger.info(f"Shutdown DB - {self.engine.url.render_as_string()}")
 
-        @app.on_event("startup")
-        def startup():
-            logger.info(f"db.startup - {self.engine.url.render_as_string()}")
-            self.engine.connect()
-
-        @app.on_event("shutdown")
-        def shutdown():
-            self._session.close_all()
-            self.engine.dispose()
-            logger.info(f"db.shutdown - {self.engine.url.render_as_string()}")
-
-    def get_session(self) -> Session:
-        session = self._session()
-        try:
-            yield session
-        finally:
-            session.close()
+    async def get_session(self) -> AsyncSession:
+        async with self._session() as session:
+            try:
+                yield session
+            finally:
+                await session.close()
+        await self._session.remove()
 
     @property
     def session(self):

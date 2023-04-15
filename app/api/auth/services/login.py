@@ -1,5 +1,6 @@
+from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.user.models import AuthUser
 from app.common.exception import APIException
@@ -11,11 +12,14 @@ from ..schemas import LogInBody
 
 class LogIn:
     @staticmethod
-    def _get_user(user_email: str, session: Session) -> AuthUser:
+    async def _get_user(user_email: str, session: AsyncSession) -> AuthUser:
         try:
-            user = session.query(AuthUser).filter(
-                AuthUser.user_email == user_email, AuthUser.is_active
-            ).one()
+            result = await session.execute(
+                select(AuthUser).where(
+                    AuthUser.user_email == user_email, AuthUser.is_active
+                )
+            )
+            user = result.scalar_one()
         except NoResultFound:
             raise APIException(Http4XX.USER_NOT_FOUND)
         return user
@@ -28,8 +32,8 @@ class LogIn:
             "refresh": handler.generate_refresh_token(user),
         }
 
-    def run(self, body: LogInBody, session: Session) -> ResultDict:
-        user = self._get_user(body.user_email, session)
+    async def run(self, body: LogInBody, session: AsyncSession) -> ResultDict:
+        user = await self._get_user(body.user_email, session)
         if not user.check_password(body.password):
             raise APIException(Http4XX.INVALID_PASSWORD)
         return self._generate_token(user)

@@ -1,6 +1,7 @@
 from fastapi import Depends
+from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.user.models import AuthUser, UserPermission
 from app.common.exception import APIException
@@ -29,39 +30,40 @@ class BasePermission:
         ```
     """
 
-    def __call__(
+    async def __call__(
         self,
         credentials: HTTPAuthorizationCredentials = Depends(auth_scheme),
-        session: Session = Depends(db.session),
+        session: AsyncSession = Depends(db.session),
     ) -> AuthUser | None:
-        return self.authorization(credentials, session)
+        return await self.authorization(credentials, session)
 
-    def get_user(
-        self, credentials: HTTPAuthorizationCredentials, session: Session
+    async def get_user(
+        self, credentials: HTTPAuthorizationCredentials, session: AsyncSession
     ) -> AuthUser:
         try:
-            return session.query(AuthUser).filter(
-                AuthUser.id == credentials.payload.pk
-            ).one()
+            result = await session.execute(
+                select(AuthUser).where(AuthUser.id == credentials.payload.pk)
+            )
+            return result.scalar_one()
         except NoResultFound:
             raise APIException(Http4XX.PERMISSION_DENIED)
 
-    def authorization(self, *args, **kwargs):
+    async def authorization(self, *args, **kwargs):
         raise NotImplementedError
 
 
 class IsAuthenticated(BasePermission):
-    def authorization(
-        self, credentials: HTTPAuthorizationCredentials, session: Session
+    async def authorization(
+        self, credentials: HTTPAuthorizationCredentials, session: AsyncSession
     ) -> AuthUser:
-        return self.get_user(credentials, session)
+        return await self.get_user(credentials, session)
 
 
 class IsNormalUser(BasePermission):
-    def authorization(
-        self, credentials: HTTPAuthorizationCredentials, session: Session
+    async def authorization(
+        self, credentials: HTTPAuthorizationCredentials, session: AsyncSession
     ) -> AuthUser:
-        user = self.get_user(credentials, session)
+        user = await self.get_user(credentials, session)
         if user.user_permission not in (
             UserPermission.normal, UserPermission.admin
         ):
@@ -70,10 +72,10 @@ class IsNormalUser(BasePermission):
 
 
 class AdminOnly(BasePermission):
-    def authorization(
-        self, credentials: HTTPAuthorizationCredentials, session: Session
+    async def authorization(
+        self, credentials: HTTPAuthorizationCredentials, session: AsyncSession
     ) -> AuthUser:
-        user = self.get_user(credentials, session)
+        user = await self.get_user(credentials, session)
         if not user.user_permission.is_admin():
             raise APIException(Http4XX.PERMISSION_DENIED)
         return user

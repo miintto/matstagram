@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.common.response import APIResponse
 from app.common.response.codes import Http2XX, Http4XX
@@ -36,11 +38,13 @@ router = APIRouter(prefix="/user", tags=["User"])
     },
 )
 async def get_my_profile(
-    user: AuthUser = Depends(IsNormalUser())
+    user: AuthUser = Depends(IsNormalUser()),
+    session: AsyncSession = Depends(db.session),
 ) -> APIResponse:
     """
     사용자의 이메일, 이름, 권한 등의 정보를 조회합니다.
     """
+    await session.refresh(user, attribute_names=["tags"])
     return APIResponse(Http2XX.SUCCESS, data=user.to_dict(load=True))
 
 
@@ -58,7 +62,7 @@ async def get_my_profile(
 async def change_my_info(
     body: UserInfoBody,
     user: AuthUser = Depends(IsNormalUser()),
-    session: Session = Depends(db.session),
+    session: AsyncSession = Depends(db.session),
 ) -> APIResponse:
     return APIResponse(
         Http2XX.SUCCESS, data=await UserProfile().update(user, body, session)
@@ -98,7 +102,7 @@ async def upload_profile_image(
 async def change_password(
     body: NewPasswordBody,
     user: AuthUser = Depends(IsNormalUser()),
-    session: Session = Depends(db.session),
+    session: AsyncSession = Depends(db.session),
 ) -> APIResponse:
     return APIResponse(
         Http2XX.SUCCESS,
@@ -120,7 +124,7 @@ async def change_password(
 async def get_user_profile(
     pk: int,
     user: AuthUser = Depends(AdminOnly()),
-    session: Session = Depends(db.session),
+    session: AsyncSession = Depends(db.session),
 ) -> APIResponse:
     """
     특정 사용자의 정보를 조회합니다.
@@ -128,7 +132,11 @@ async def get_user_profile(
     관리자 권한으로 호출하는 경우만 조회가 가능합니다.
     """
     try:
-        user = session.query(AuthUser).filter(AuthUser.id == pk).one()
+        result = await session.execute(
+            select(AuthUser).where(AuthUser.id == pk)
+            .options(selectinload(AuthUser.tags))
+        )
+        user = result.scalar_one()
     except NoResultFound:
         return APIResponse(Http4XX.USER_NOT_FOUND)
     return APIResponse(Http2XX.SUCCESS, data=user.to_dict(load=True))

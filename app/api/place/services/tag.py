@@ -1,5 +1,6 @@
+from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.user.models import AuthUser
 from app.common.exception import APIException
@@ -11,27 +12,36 @@ from ..schemas.request import TagBody
 
 class TagHandler:
     @staticmethod
-    def get_user_tag_list(user: AuthUser, session: Session) -> ResultList:
+    async def get_user_tag_list(
+        user: AuthUser, session: AsyncSession
+    ) -> ResultList:
         user_pk = 1 if user.user_permission.is_anonymous() else user.id  # TODO: 비회원 처리
-        tags = session.query(Tag).filter(Tag.user_id == user_pk).all()
-        return [tag.to_dict() for tag in tags]
+        result = await session.execute(
+            select(Tag).where(Tag.user_id == user_pk)
+        )
+        return [tag.to_dict() for tag in result.scalars()]
 
-    def create(self, user: AuthUser, body: TagBody, session: Session) -> bool:
+    async def create(
+        self, user: AuthUser, body: TagBody, session: AsyncSession
+    ) -> ResultDict:
         tag = Tag(user_id=user.id, tag_name=body.tag_name, memo=body.memo)
         session.add(tag)
-        session.commit()
-        return tag.to_dict()
+        result = tag.to_dict()
+        await session.commit()
+        return result
 
-    def update(
-        self, user: AuthUser, tag_id: int, body: TagBody, session: Session
+    async def update(
+        self, user_pk: int, tag_id: int, body: TagBody, session: AsyncSession
     ) -> ResultDict:
         try:
-            tag = session.query(Tag).filter(
-                Tag.id == tag_id, Tag.user_id == user.id
-            ).one()
+            result = await session.execute(
+                select(Tag).where(Tag.id == tag_id, Tag.user_id == user_pk)
+            )
+            tag = result.scalar_one()
         except NoResultFound:
             raise APIException(Http4XX.TAG_NOT_FOUND)
         tag.tag_name = body.tag_name
         tag.memo = body.memo
-        session.commit()
-        return tag.to_dict()
+        result = tag.to_dict
+        await session.commit()
+        return result

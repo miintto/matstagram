@@ -28,7 +28,8 @@ def create_app():
     )
 
     # Databases
-    db.init_app(app)
+    db.init_app()
+    app.router.add_event_handler("shutdown", db.dispose_connection)
 
     # Loggings
     logging.config.dictConfig(settings.LOGGING_CONFIG)
