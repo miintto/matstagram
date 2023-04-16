@@ -6,13 +6,21 @@ const submitRegister = () => {
     successFunc = (data, textStatus, xhr) => {
       const accessToken = data["data"]["access"];
       setCookie("access", accessToken);
-      window.location.replace("/map");
+      location.replace("/map");
     },
     errorFunc = (data, textStatus, xhr) => {
       $('.exception-message').text(data.responseJSON["message"]);
     }
   );
-}
+};
+
+$("#button-submit-register").click((e) => {
+  submitRegister();
+});
+
+$("#button-register-back").click((e) => {
+  location.href = "/";
+});
 
 const onkeyupRegister = () => {
 	if (window.event.keyCode === 13) {

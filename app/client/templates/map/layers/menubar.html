@@ -1,13 +1,29 @@
 <div class="menubar">
   <div class="menubar-button margin-auto">
     <div class="menubar-button-section button-common button-black">
-      <div id="button-logout">로그아웃</div>
+      <div id="button-logout">
+      {% if is_share %}
+        나가기
+      {% else %}
+        로그아웃
+      {% endif %}
+      </div>
     </div>
+  {% if is_share %}
+    <div class="menubar-button-section button-common button-black">
+      <div id="button-share" onclick="onClickCopyURL()">공유하기</div>
+    </div>
+  {% else %}
     <div class="menubar-button-section button-common button-black">
       <div id="button-filter">필터</div>
     </div>
+  {% endif %}
     <div class="menubar-button-section button-common button-black">
-      <div id="button-my-place">내 맛집</div>
+    {% if is_share %}
+      <div id="button-my-place" onclick="onClickMyPlaceShared()">맛집 목록</div>
+      {% else %}
+      <div id="button-my-place" onclick="onClickMyPlace()">내 맛집</div>
+      {% endif %}
     </div>
   </div>
 </div>

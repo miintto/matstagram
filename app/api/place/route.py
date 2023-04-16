@@ -46,7 +46,8 @@ async def get_place(
     특정 맛집에 대한 상세 정보를 반환합니다.
     """
     return APIResponse(
-        Http2XX.SUCCESS, data=await PlaceManager().get_place(user, pk, session)
+        Http2XX.SUCCESS,
+        data=await PlaceManager().get_place(user.id, pk, session),
     )
 
 
@@ -74,7 +75,7 @@ async def get_place_list(
     """
     return APIResponse(
         Http2XX.SUCCESS,
-        data=await PlaceManager().get_place_list(user, tags, session),
+        data=await PlaceManager().get_place_list(user.id, tags, session),
     )
 
 

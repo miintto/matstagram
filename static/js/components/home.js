@@ -5,13 +5,17 @@ const submitLogin = () => {
     successFunc = (data, textStatus, xhr) => {
       const accessToken = data["data"]["access"];
       setCookie("access", accessToken);
-      window.location.replace("/map");
+      location.replace("/map");
     },
     errorFunc = (data, textStatus, xhr) => {
       $('.exception-message').text(data.responseJSON["message"]);
     },
   );
 }
+
+$("#button-home-login").click((e) => {
+  submitLogin();
+});
 
 const onkeyupLogin = () => {
 	if (window.event.keyCode === 13) {

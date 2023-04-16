@@ -8,11 +8,18 @@
 <script src="https://cdn.jsdelivr.net/npm/ol@v7.1.0/dist/ol.js"></script>
 <script src="{{ url_for('static', path='/js/ajax/place.js') }}"></script>
 <script src="{{ url_for('static', path='/js/ajax/user.js') }}"></script>
-<script src="{{ url_for('static', path='/js/components/filter.js') }}"></script>
-<script src="{{ url_for('static', path='/js/components/profile.js') }}"></script>
-<script src="{{ url_for('static', path='/js/components/myPlace.js') }}"></script>
-<script src="{{ url_for('static', path='/js/components/map.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/map/filter.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/map/profile.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/map/myPlace.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/map/layers.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/map/map.js') }}"></script>
+{% if is_share %}
+<script src="{{ url_for('static', path='/js/ajax/share.js') }}"></script>
+<script src="{{ url_for('static', path='/js/components/share/map.js') }}"></script>
+<script>displaySharePlaces();</script>
+{% else %}
 <script>displayPlaces({});</script>
+{% endif %}
 {% endblock %}
 
 {% block content %}

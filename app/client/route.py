@@ -24,6 +24,13 @@ def display_map(request: Request):
     return template.TemplateResponse("map/map.html", {"request": request})
 
 
+@router.get("/share/{key}", include_in_schema=False)
+def share(request: Request, key: str):
+    return template.TemplateResponse(
+        "map/map.html", {"request": request, "is_share": True}
+    )
+
+
 @router.get("/register", include_in_schema=False)
 def register(request: Request):
     return template.TemplateResponse(

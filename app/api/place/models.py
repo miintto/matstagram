@@ -1,9 +1,11 @@
 from datetime import datetime
+import enum
 
 from sqlalchemy import (
     Boolean,
     Column,
     DateTime,
+    Enum,
     Float,
     ForeignKey,
     Integer,
@@ -12,6 +14,12 @@ from sqlalchemy import (
 )
 
 from app.common.models import Base
+
+
+class PlaceType(enum.Enum):
+    restaurant = "restaurant"  # 맛집
+    tourist_spot = "tourist_spot"  # 관광 명소
+    accommodation = "accommodation"  # 숙소
 
 
 class Place(Base):
@@ -28,6 +36,13 @@ class Place(Base):
     lng = Column(Float, comment="경도", nullable=True)
     address = Column(String(254), comment="상세 주소", nullable=True)
     is_active = Column(Boolean, comment="활성화 여부", nullable=False, default=True)
+    image_url = Column(Text, comment="대표 이미지 url", nullable=True)
+    place_type = Column(
+        Enum(PlaceType, native_enum=False, length=30),
+        comment="장소 유형",
+        nullable=False,
+        default=PlaceType.restaurant,
+    )
     created_dtm = Column(
         DateTime, comment="생성 일시", nullable=False, default=datetime.utcnow
     )
@@ -40,6 +55,7 @@ class Place(Base):
             "lat": self.lat,
             "lng": self.lng,
             "address": self.address,
+            "image_url": self.image_url,
             "created_dtm": self.created_dtm.strftime("%Y-%m-%d %H:%M:%S.%f"),
         }
 

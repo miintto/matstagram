@@ -5,16 +5,24 @@ const submitDocumentLogin = () => {
     successFunc = (data, textStatus, xhr) => {
       const accessToken = data["data"]["access"];
       setCookie("access", accessToken);
-      window.location.replace("/documents");
+      location.replace("/documents");
     },
     errorFunc = (data, textStatus, xhr) => {
       $('.exception-message').text(data.responseJSON["message"]);
     },
   );
-}
+};
+
+$("#button-login-document").click((e) => {
+  submitDocumentLogin();
+});
+
+$("#button-document-back").click((e) => {
+  location.href = "/";
+});
 
 const onkeyupLogin = () => {
 	if (window.event.keyCode === 13) {
     submitDocumentLogin();
   }
-}
+};

@@ -3,9 +3,7 @@
 }
 
 .content-head {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  text-align: center;
+  margin: 50px 0px;
 }
 
 .register-title {
@@ -19,23 +17,18 @@
 
 .main-container {
   width: 320px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .input-section {
   width: 300px;
-  margin-top: 15px;
-  margin-bottom: 10px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 15px auto;
   border: 1px solid var(--color-steel-gray);
   border-radius: .5em;
   background-color: var(--color-white);
   text-align: center;
 }
 
-.input-placeholder {
+.input-section input {
   width: 290px;
   height: 45px;
   margin: 0px;
@@ -47,51 +40,25 @@
 }
 
 .message-section {
-  width: 300px;
   height: 45px;
-  margin-left: auto;
-  margin-right: auto;
   color: var(--color-red);
   font-size: 13px;
-  text-align: center;
-}
-
-.button-section-flex {
-  display: flex;
 }
 
 .submit-button-long {
-  height: 50px;
   width: 300px;
 }
 
 .submit-button-small {
-  height: 50px;
   width: 140px;
+  margin: 0px 5px;
 }
 
-.submit-button {
-  margin: auto;
-  border-radius: 1em;
-  line-height: 50px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.submit-button a {
-  display: block;
-  color: var(--color-bg-white);
-  font-size: 18px;
-  text-decoration: none;
-}
-
-.signup-container {
+.redirect-container {
   width: 320px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.signup-section {
+.link-section {
   margin: 20px 40px;
   font-size: 14px;
   text-align: right;

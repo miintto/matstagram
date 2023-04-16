@@ -30,6 +30,7 @@ class Http4XX(Enum):
     INVALID_FILE_FORMAT = (
         "F010", "올바르지 않은 형식의 파일입니다.", status.HTTP_422_UNPROCESSABLE_ENTITY
     )
+    SHARE_NOT_FOUND = ("F011", "공유된 장소를 찾을 수 없습니다.", status.HTTP_404_NOT_FOUND)
 
 
 class Http5XX(Enum):

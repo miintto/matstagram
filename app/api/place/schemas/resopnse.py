@@ -38,6 +38,10 @@ class Place(BaseModel):
         title="맛집 주소",
         description="해당 식당이 위치한 상세 주소",
     )
+    image_url: str | None = Field(
+        title="맛집 대표 이미지",
+        description="맛집을 설명할 수 있는 이미지 url",
+    )
     created_dtm: datetime = Field(
         title="맛집 등록 일시",
         pattern="YYYY-MM-DD HH:Mi:SS.ffffff",

@@ -17,13 +17,13 @@ logger = logging.getLogger(__name__)
 
 class PlaceManager:
     async def get_place(
-        self, user: AuthUser, place_id: int, session: AsyncSession
+        self, user_pk: int, place_id: int, session: AsyncSession
     ) -> ResultDict:
         result = await session.execute(
             select(Place, Tag)
             .join(PlaceTag, Place.id == PlaceTag.place_id, isouter=True)
             .join(Tag, Tag.id == PlaceTag.tag_id, isouter=True)
-            .where(Place.id == place_id, Place.user_id == user.id)
+            .where(Place.id == place_id, Place.user_id == user_pk)
         )
         data = result.fetchall()
         if not data:
@@ -31,9 +31,8 @@ class PlaceManager:
         return PlaceSerializer(data).serialize()[0]
 
     async def get_place_list(
-        self, user: AuthUser, tags: str, session: AsyncSession
+        self, user_pk: int, tags: str, session: AsyncSession
     ) -> ResultList:
-        user_pk = 1 if user.user_permission.is_anonymous() else user.id  # TODO: 비회원 처리
         query = (
             select(Place, Tag)
             .join(PlaceTag, Place.id == PlaceTag.place_id, isouter=True)
