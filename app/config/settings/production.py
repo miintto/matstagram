@@ -16,6 +16,11 @@ class ProdSettings(Settings):
                 "exclude_fields": ["log.original"],
             },
         },
+        "filters": {
+            "transaction": {
+                "()": "app.config.logging.filter.TransactionFilter",
+            }
+        },
         "handlers": {
             "console": {
                 "class": "logging.StreamHandler",
@@ -27,6 +32,7 @@ class ProdSettings(Settings):
                 "level": "INFO",
                 "formatter": "ecs",
                 "filename": f"{LOG_DIR}/api.log",
+                "filters": ["transaction"],
             },
         },
         "loggers": {

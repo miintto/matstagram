@@ -46,7 +46,6 @@ class DBConnection:
 
     async def dispose_connection(self):
         await self.engine.dispose()
-        logger.info(f"Shutdown DB - {self.engine.url.render_as_string()}")
 
     async def get_session(self) -> AsyncSession:
         async with self._session() as session:

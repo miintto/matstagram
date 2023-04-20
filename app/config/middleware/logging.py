@@ -3,6 +3,8 @@ import uuid
 
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
+from ..logging.transaction import ctx_manager
+
 logger = logging.getLogger("fastapi.request")
 
 
@@ -15,16 +17,17 @@ class LoggingMiddleware:
             await self.app(scope, receive, send)
             return
 
-        log_msg = self.make_logging_message(scope)
-        logger.info(log_msg)
+        ctx_manager.set_transaction()
+        request_log_msg = self.make_logging_message(scope)
+        logger.info(request_log_msg)
 
         async def logging_response_after_send(message: Message):
-            nonlocal log_msg
+            nonlocal request_log_msg
 
             await send(message)
 
             if message["type"] == "http.response.start":
-                logger.info(f"{log_msg} - {message['status']}")
+                logger.info(f"{request_log_msg} - {message['status']}")
 
         await self.app(scope, receive, logging_response_after_send)
 
