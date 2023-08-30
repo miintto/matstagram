@@ -29,7 +29,7 @@ class SignUp:
         user = AuthUser(
             user_name=body.user_email,
             user_email=body.user_email,
-            user_permission=UserPermission.normal,
+            user_permission=UserPermission.NORMAL,
         )
         user.set_password(body.password)
         session.add(user)

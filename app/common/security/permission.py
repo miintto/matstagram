@@ -65,7 +65,7 @@ class IsNormalUser(BasePermission):
     ) -> AuthUser:
         user = await self.get_user(credentials, session)
         if user.user_permission not in (
-            UserPermission.normal, UserPermission.admin
+            UserPermission.NORMAL, UserPermission.ADMIN
         ):
             raise APIException(Http4XX.PERMISSION_DENIED)
         return user

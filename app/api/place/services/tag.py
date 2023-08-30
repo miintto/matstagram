@@ -26,6 +26,7 @@ class TagHandler:
     ) -> ResultDict:
         tag = Tag(user_id=user.id, tag_name=body.tag_name, memo=body.memo)
         session.add(tag)
+        await session.flush()
         result = tag.to_dict()
         await session.commit()
         return result
@@ -42,6 +43,6 @@ class TagHandler:
             raise APIException(Http4XX.TAG_NOT_FOUND)
         tag.tag_name = body.tag_name
         tag.memo = body.memo
-        result = tag.to_dict
+        result = tag.to_dict()
         await session.commit()
         return result

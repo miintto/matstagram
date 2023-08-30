@@ -13,8 +13,8 @@ class User(BaseModel):
     user_email: EmailStr = Field(title="사용자 이메일")
     user_permission: UserPermission = Field(
         title="사용자 권한",
-        description="`anonymous`: 비회원 / `normal`: 일반 사용자 / `admin`: 관리자",
-        example="normal",
+        description="`ANONYMOUS`: 비회원 / `NORMAL`: 일반 사용자 / `ADMIN`: 관리자",
+        example="NORMAL",
         type="string",
     )
     profile_image: str | None = Field(

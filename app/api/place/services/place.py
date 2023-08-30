@@ -68,7 +68,7 @@ class PlaceManager:
         self, tag_ids: list, place_id: int, session: AsyncSession
     ):
         result = await session.execute(
-            select(func.count(Tag)).where(Tag.id.in_(tag_ids))
+            select(func.count(Tag.id)).where(Tag.id.in_(tag_ids))
         )
         if result.scalar_one() != len(tag_ids):
             raise APIException(Http4XX.TAG_NOT_FOUND)
@@ -83,6 +83,6 @@ class PlaceManager:
         place = await self._create_place(user, body, session)
         if body.tag_ids:
             await self._create_tag(body.tag_ids, place.id, session)
-        result = await self.get_place(user, place.id, session)
+        result = await self.get_place(user.id, place.id, session)
         await session.commit()
         return result

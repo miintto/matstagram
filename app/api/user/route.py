@@ -106,7 +106,7 @@ async def change_password(
 ) -> APIResponse:
     return APIResponse(
         Http2XX.SUCCESS,
-        data=UserProfile().change_password(user, body, session),
+        data=await UserProfile().change_password(user, body, session),
     )
 
 

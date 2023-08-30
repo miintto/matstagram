@@ -9,15 +9,15 @@ from app.common.models import Base
 
 
 class UserPermission(enum.Enum):
-    anonymous = "anonymous"
-    normal = "normal"
-    admin = "admin"
+    ANONYMOUS = "ANONYMOUS"
+    NORMAL = "NORMAL"
+    ADMIN = "ADMIN"
 
     def is_anonymous(self):
-        return self == self.anonymous
+        return self == self.ANONYMOUS
 
     def is_admin(self):
-        return self == self.admin
+        return self == self.ADMIN
 
 
 class AuthUser(Base):
@@ -35,7 +35,7 @@ class AuthUser(Base):
         Enum(UserPermission, native_enum=False, length=15),
         comment="사용자 권한",
         nullable=False,
-        default=UserPermission.normal,
+        default=UserPermission.NORMAL,
     )
     profile_image = Column(Text, comment="사용자 프로필 이미지", nullable=True)
     is_active = Column(Boolean, comment="활성화 여부", nullable=False, default=True)
