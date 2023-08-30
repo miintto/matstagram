@@ -1,6 +1,7 @@
 [run]
 source = app
 omit = app/config/settings/*
+concurrency = thread, greenlet
 
 [report]
 exclude_lines =

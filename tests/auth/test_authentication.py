@@ -30,7 +30,7 @@ class TestAuthentication(BaseTestCase):
     @pytest.mark.asyncio
     async def test_auth_success(self):
         user = AuthUser(
-            id=1, user_name="test-user", user_permission=UserPermission.normal
+            id=1, user_name="test-user", user_permission=UserPermission.NORMAL
         )
         token = self._generate_token(user)
         request = Mock(headers={"Authorization": f"JWT {token}"})
@@ -43,7 +43,7 @@ class TestAuthentication(BaseTestCase):
     @pytest.mark.asyncio
     async def test_auth_invalid_token(self):
         user = AuthUser(
-            id=1, user_name="test-user", user_permission=UserPermission.normal
+            id=1, user_name="test-user", user_permission=UserPermission.NORMAL
         )
 
         request = Mock(headers={})
