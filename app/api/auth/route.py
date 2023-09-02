@@ -1,13 +1,11 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.common.response import APIResponse
 from app.common.response.codes import Http2XX
 from app.common.schemas import CommonResponse
-from app.config.connection import db
 from .schemas import LogInBody, SignUpBody, TokenResponse
-from .services.login import LogIn
-from .services.signup import SignUp
+from .services.login import LogInService
+from .services.signup import SignUpService
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -22,7 +20,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
     },
 )
 async def sign_up(
-    body: SignUpBody, session: AsyncSession = Depends(db.session)
+    body: SignUpBody, service: SignUpService = Depends(SignUpService)
 ) -> APIResponse:
     """
     정보를 입력받아 새로운 계정을 생성합니다.
@@ -31,7 +29,7 @@ async def sign_up(
         - 다른 사용자와 중복된 이메일은 사용할 수 없습니다.
         - 비밀번호는 숫자, 영문 대/소문자의 조합으로 길이는 8~20자 사이로 설정합니다.
     """
-    return APIResponse(Http2XX.SUCCESS, data=await SignUp().run(body, session))
+    return APIResponse(Http2XX.SUCCESS, data=await service.run(body))
 
 
 @router.post(
@@ -46,9 +44,9 @@ async def sign_up(
     },
 )
 async def log_in(
-    body: LogInBody, session: AsyncSession = Depends(db.session)
+    body: LogInBody, service: LogInService = Depends(LogInService)
 ) -> APIResponse:
     """
     계정 정보를 입력받아서 일치하는 계정이 존재하면 인증 토큰을 반환합니다.
     """
-    return APIResponse(Http2XX.SUCCESS, data=await LogIn().run(body, session))
+    return APIResponse(Http2XX.SUCCESS, data=await service.run(body))

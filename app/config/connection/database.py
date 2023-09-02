@@ -51,6 +51,10 @@ class DBConnection:
         async with self._session() as session:
             try:
                 yield session
+                await self._session.commit()
+            except Exception:
+                await session.rollback()
+                raise
             finally:
                 await session.close()
         await self._session.remove()

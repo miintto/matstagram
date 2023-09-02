@@ -1,8 +1,7 @@
-from sqlalchemy import select
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import Depends
 
 from app.api.user.models import AuthUser
+from app.api.user.respository import UserRepository
 from app.common.exception import APIException
 from app.common.response.codes import Http4XX
 from app.common.security.jwt import JWTHandler
@@ -10,17 +9,13 @@ from app.common.types import ResultDict
 from ..schemas import LogInBody
 
 
-class LogIn:
-    @staticmethod
-    async def _get_user(user_email: str, session: AsyncSession) -> AuthUser:
-        try:
-            result = await session.execute(
-                select(AuthUser).where(
-                    AuthUser.user_email == user_email, AuthUser.is_active
-                )
-            )
-            user = result.scalar_one()
-        except NoResultFound:
+class LogInService:
+    def __init__(self, user_repository: UserRepository = Depends(UserRepository)):
+        self.user_repository = user_repository
+
+    async def _get_user(self, user_email: str) -> AuthUser:
+        user = await self.user_repository.get_user_by_email(user_email)
+        if not user or not user.is_active:
             raise APIException(Http4XX.USER_NOT_FOUND)
         return user
 
@@ -32,8 +27,8 @@ class LogIn:
             "refresh": handler.generate_refresh_token(user),
         }
 
-    async def run(self, body: LogInBody, session: AsyncSession) -> ResultDict:
-        user = await self._get_user(body.user_email, session)
+    async def run(self, body: LogInBody) -> ResultDict:
+        user = await self._get_user(body.user_email)
         if not user.check_password(body.password):
             raise APIException(Http4XX.INVALID_PASSWORD)
         return self._generate_token(user)
