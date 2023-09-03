@@ -5,7 +5,7 @@ import time
 from app.common.exception import APIException
 from app.common.response.codes import Http4XX
 from app.config.settings import get_settings
-from app.api.user.models import AuthUser
+from app.domain.models.user import AuthUser
 from .schemas import TokenType
 
 

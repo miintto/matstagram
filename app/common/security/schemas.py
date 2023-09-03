@@ -2,7 +2,7 @@ from enum import Enum
 
 from pydantic import BaseModel, PositiveInt
 
-from app.api.user.models import UserPermission
+from app.domain.models.user import UserPermission
 
 
 class TokenType(Enum):

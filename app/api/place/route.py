@@ -1,7 +1,5 @@
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.user.models import AuthUser
 from app.common.response import APIResponse
 from app.common.response.codes import Http2XX
 from app.common.schemas import (
@@ -10,7 +8,7 @@ from app.common.schemas import (
     UnauthenticatedResponse
 )
 from app.common.security.permission import IsAuthenticated, IsNormalUser
-from app.config.connection import db
+from app.domain.models.user import AuthUser
 from .schemas.request import PlaceRegisterBody, TagBody
 from .schemas.resopnse import (
     PlaceCreatedResponse,
@@ -20,8 +18,8 @@ from .schemas.resopnse import (
     TagListResponse,
     TagResponse,
 )
-from .services.place import PlaceManager
-from .services.tag import TagHandler
+from .services.place import PlaceService
+from .services.tag import TagService
 
 router = APIRouter(tags=["Place"])
 
@@ -40,14 +38,14 @@ router = APIRouter(tags=["Place"])
 async def get_place(
     pk: int,
     user: AuthUser = Depends(IsNormalUser()),
-    session: AsyncSession = Depends(db.session),
+    service: PlaceService = Depends(PlaceService),
 ) -> APIResponse:
     """
     특정 맛집에 대한 상세 정보를 반환합니다.
     """
     return APIResponse(
         Http2XX.SUCCESS,
-        data=await PlaceManager().get_place(user.id, pk, session),
+        data=await service.get_place(pk),
     )
 
 
@@ -68,14 +66,14 @@ async def get_place_list(
         default=None,
     ),
     user: AuthUser = Depends(IsAuthenticated()),
-    session: AsyncSession = Depends(db.session),
+    service: PlaceService = Depends(PlaceService),
 ) -> APIResponse:
     """
     사용자가 등록한 맛집 리스트를 조회합니다.
     """
     return APIResponse(
         Http2XX.SUCCESS,
-        data=await PlaceManager().get_place_list(user.id, tags, session),
+        data=await service.get_place_list(user.id, tags),
     )
 
 
@@ -94,12 +92,12 @@ async def get_place_list(
 async def register_place(
     body: PlaceRegisterBody,
     user: AuthUser = Depends(IsNormalUser()),
-    session: AsyncSession = Depends(db.session),
+    service: PlaceService = Depends(PlaceService),
 ) -> APIResponse:
     """맛집을 등록합니다."""
     return APIResponse(
         Http2XX.CREATED,
-        data=await PlaceManager().register(user, body, session),
+        data=await service.register(user, body),
     )
 
 
@@ -115,7 +113,7 @@ async def register_place(
 )
 async def tag_list(
     user: AuthUser = Depends(IsAuthenticated()),
-    session: AsyncSession = Depends(db.session),
+    service: TagService = Depends(TagService),
 ) -> APIResponse:
     """
     사용자가 등록한 태그 목록을 조회합니다.
@@ -123,8 +121,7 @@ async def tag_list(
     만일 등록돤 태그가 하나도 없는 경우 `data` 의 반환값으로 빈 array (`[]`) 를 반환합니다.
     """
     return APIResponse(
-        Http2XX.SUCCESS,
-        data=await TagHandler.get_user_tag_list(user, session)
+        Http2XX.SUCCESS, data=await service.get_user_tag_list(user)
     )
 
 
@@ -142,13 +139,13 @@ async def tag_list(
 async def create_tag(
     body: TagBody,
     user: AuthUser = Depends(IsNormalUser()),
-    session: AsyncSession = Depends(db.session),
+    service: TagService = Depends(TagService),
 ) -> APIResponse:
     """
     태그 정보를 입력받아 사용자의 태그를 생성합니다.
     """
     return APIResponse(
-        Http2XX.CREATED, data=await TagHandler().create(user, body, session)
+        Http2XX.CREATED, data=await service.create(user, body)
     )
 
 
@@ -167,12 +164,12 @@ async def update_tag(
     pk: int,
     body: TagBody,
     user: AuthUser = Depends(IsNormalUser()),
-    session: AsyncSession = Depends(db.session),
+    service: TagService = Depends(TagService),
 ) -> APIResponse:
     """
     태그 정보를 수정합니다.
     """
     return APIResponse(
         Http2XX.SUCCESS,
-        data=await TagHandler().update(user.id, pk, body, session),
+        data=await service.update(user.id, pk, body),
     )

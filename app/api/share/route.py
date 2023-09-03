@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.user.models import AuthUser
 from app.api.place.schemas.resopnse import PlaceListResponse
 from app.common.response import APIResponse
 from app.common.response.codes import Http2XX
@@ -11,6 +10,7 @@ from app.common.schemas import (
 )
 from app.common.security.permission import IsAuthenticated
 from app.config.connection import db
+from app.domain.models.user import AuthUser
 from .schemas import ShareBody, ShareCreatedResponse
 from .service import ShareService
 

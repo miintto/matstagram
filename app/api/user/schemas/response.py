@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field
 
 from app.api.place.schemas.resopnse import Tag
-from app.api.user.models import UserPermission
+from app.domain.models.user import UserPermission
 from app.common.schemas import CreatedResponse, SuccessResponse
 
 

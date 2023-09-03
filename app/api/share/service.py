@@ -4,13 +4,15 @@ from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.place.models import Place, PlaceTag, Tag
+from app.domain.models.place import Place
+from app.domain.models.tag import PlaceTag, Tag
 from app.api.place.serializers import PlaceSerializer
-from app.api.user.models import AuthUser
 from app.common.exception import APIException
 from app.common.response.codes import Http4XX
 from app.common.types import ResultList
-from .models import Location, Share, ShareLocation, PlaceLocation
+from app.domain.models.user import AuthUser
+from app.domain.models.location import Location, PlaceLocation
+from app.domain.models.share import Share, ShareLocation
 from .schemas import ShareBody
 
 

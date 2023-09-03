@@ -12,9 +12,13 @@ class BaseRepository(ABC):
     def __init__(self, session: AsyncSession = Depends(db.session)):
         self._session = session
 
-    async def save(self, instance, refresh: bool = False):
-        self._session.add(instance)
+    async def flush(self, *instance):
+        self._session.add_all(instance)
+        await self._session.flush()
+
+    async def save(self, *instance, refresh: bool = True):
+        self._session.add_all(instance)
         await self._session.commit()
         if refresh:
-            await self._session.refresh(instance)
+            await self._session.refresh(*instance)
             return instance

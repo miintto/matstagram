@@ -1,11 +1,11 @@
 from fastapi import Depends
 
-from app.api.user.models import AuthUser, UserPermission
-from app.api.user.respository import UserRepository
 from app.common.exception import APIException
 from app.common.response.codes import Http4XX
 from app.common.security.jwt import JWTHandler
 from app.common.types import ResultDict
+from app.domain.models.user import AuthUser, UserPermission
+from app.domain.repository.user import UserRepository
 from ..schemas import SignUpBody
 
 
@@ -29,7 +29,8 @@ class SignUpService:
             user_permission=UserPermission.NORMAL,
         )
         user.set_password(body.password)
-        return await self.user_repository.save(user, refresh=True)
+        await self.user_repository.flush(user)
+        return user
 
     @staticmethod
     def _generate_token(user: AuthUser) -> dict:

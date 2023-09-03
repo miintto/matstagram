@@ -3,7 +3,7 @@ from typing import Sequence
 from sqlalchemy.engine.row import Row
 
 from app.common.types import ResultList
-from .models import Place
+from app.domain.models.place import Place
 
 
 class PlaceSerializer:

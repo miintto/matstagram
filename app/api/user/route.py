@@ -1,11 +1,7 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy import select
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from app.common.response import APIResponse
-from app.common.response.codes import Http2XX, Http4XX
+from app.common.response.codes import Http2XX
 from app.common.schemas import (
     CommonResponse,
     PermissionDeniedResponse,
@@ -14,15 +10,14 @@ from app.common.schemas import (
 )
 from app.common.security.permission import AdminOnly, IsNormalUser
 from app.common.upload import upload_profile_image
-from app.config.connection import db
-from .models import AuthUser
+from app.domain.models.user import AuthUser
 from .schemas.request import NewPasswordBody, UserInfoBody
 from .schemas.response import (
     ImageUploadResponse,
     UserResponse,
     UserProfileResponse,
 )
-from .services.user_profile import UserProfile
+from .services.user_profile import UserService
 
 router = APIRouter(prefix="/user", tags=["User"])
 
@@ -39,13 +34,14 @@ router = APIRouter(prefix="/user", tags=["User"])
 )
 async def get_my_profile(
     user: AuthUser = Depends(IsNormalUser()),
-    session: AsyncSession = Depends(db.session),
+    service: UserService = Depends(UserService),
 ) -> APIResponse:
     """
     사용자의 이메일, 이름, 권한 등의 정보를 조회합니다.
     """
-    await session.refresh(user, attribute_names=["tags"])
-    return APIResponse(Http2XX.SUCCESS, data=user.to_dict(load=True))
+    return APIResponse(
+        Http2XX.SUCCESS, data=await service.get_user_info(user_id=user.id)
+    )
 
 
 @router.patch(
@@ -62,10 +58,10 @@ async def get_my_profile(
 async def change_my_info(
     body: UserInfoBody,
     user: AuthUser = Depends(IsNormalUser()),
-    session: AsyncSession = Depends(db.session),
+    service: UserService = Depends(UserService),
 ) -> APIResponse:
     return APIResponse(
-        Http2XX.SUCCESS, data=await UserProfile().update(user, body, session)
+        Http2XX.SUCCESS, data=await service.update(user, body)
     )
 
 
@@ -102,11 +98,11 @@ async def upload_profile_image(
 async def change_password(
     body: NewPasswordBody,
     user: AuthUser = Depends(IsNormalUser()),
-    session: AsyncSession = Depends(db.session),
+    service: UserService = Depends(UserService),
 ) -> APIResponse:
     return APIResponse(
         Http2XX.SUCCESS,
-        data=await UserProfile().change_password(user, body, session),
+        data=await service.change_password(user, body),
     )
 
 
@@ -124,19 +120,11 @@ async def change_password(
 async def get_user_profile(
     pk: int,
     user: AuthUser = Depends(AdminOnly()),
-    session: AsyncSession = Depends(db.session),
+    service: UserService = Depends(UserService),
 ) -> APIResponse:
     """
     특정 사용자의 정보를 조회합니다.
 
     관리자 권한으로 호출하는 경우만 조회가 가능합니다.
     """
-    try:
-        result = await session.execute(
-            select(AuthUser).where(AuthUser.id == pk)
-            .options(selectinload(AuthUser.tags))
-        )
-        user = result.scalar_one()
-    except NoResultFound:
-        return APIResponse(Http4XX.USER_NOT_FOUND)
-    return APIResponse(Http2XX.SUCCESS, data=user.to_dict(load=True))
+    return APIResponse(Http2XX.SUCCESS, data=await service.get_user_info(pk))

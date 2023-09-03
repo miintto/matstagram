@@ -1,11 +1,11 @@
 from fastapi import Depends
 
-from app.api.user.models import AuthUser
-from app.api.user.respository import UserRepository
 from app.common.exception import APIException
 from app.common.response.codes import Http4XX
 from app.common.security.jwt import JWTHandler
 from app.common.types import ResultDict
+from app.domain.models.user import AuthUser
+from app.domain.repository.user import UserRepository
 from ..schemas import LogInBody
 
 
