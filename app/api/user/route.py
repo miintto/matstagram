@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from app.common.response import APIResponse
-from app.common.response.codes import Http2XX
+from app.common.http.codes import Http2XX
+from app.common.http.response import APIResponse
 from app.common.schemas import (
     CommonResponse,
     PermissionDeniedResponse,

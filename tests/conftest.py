@@ -2,8 +2,8 @@ from httpx import AsyncClient
 import pytest_asyncio
 from sqlalchemy import delete
 
-from app.api.user.models import AuthUser
 from app.config.connection import db
+from app.domain.models.user import AuthUser
 from app.main import app
 
 fixture_root_email = "matstagram@test.com"

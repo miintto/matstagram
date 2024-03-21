@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from starlette.requests import Request
 
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX
+from app.common.http.codes import Http4XX
 from .jwt import JWTHandler
 from .schemas import HTTPAuthorizationCredentials
 

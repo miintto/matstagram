@@ -1,7 +1,7 @@
 import pytest
 
-from app.api.user.models import AuthUser, UserPermission
 from app.common.security.jwt import JWTHandler
+from app.domain.models.user import AuthUser, UserPermission
 from tests.management.testcase import BaseTestCase
 
 

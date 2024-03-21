@@ -6,15 +6,15 @@ from starlette.staticfiles import StaticFiles
 
 from app import __version__
 from app.config.connection import db
+from app.config.exception_handlers import exception_handlers
 from app.config.middleware.logging import LoggingMiddleware
 from app.config.router import router
 from app.config.settings import get_settings
-from app.common.exception.handlers import exception_handlers
 
 settings = get_settings()
 
 
-def create_app():
+def create_app() -> FastAPI:
     app = FastAPI(
         routes=router.routes,
         title="맛스타그램",
@@ -29,9 +29,9 @@ def create_app():
 
     # Databases
     db.init_app()
-    app.router.add_event_handler("shutdown", db.dispose_connection)
+    app.add_event_handler("shutdown", db.dispose_connection)
 
-    # Loggings
+    # Logging
     logging.config.dictConfig(settings.LOGGING_CONFIG)
 
     # Static

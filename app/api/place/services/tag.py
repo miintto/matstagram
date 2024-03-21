@@ -2,7 +2,7 @@ from fastapi import Depends
 from sqlalchemy.exc import NoResultFound
 
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX
+from app.common.http.codes import Http4XX
 from app.common.types import ResultDict, ResultList
 from app.domain.models.tag import Tag
 from app.domain.models.user import AuthUser

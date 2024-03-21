@@ -2,8 +2,8 @@ import pytest
 from sqlalchemy import select
 
 from app.api.auth.schemas import TokenResponse
-from app.api.user.models import AuthUser
 from app.common.schemas import CommonResponse
+from app.domain.models.user import AuthUser
 from tests.conftest import fixture_root_email
 from tests.management.testcase import BaseTestCase
 

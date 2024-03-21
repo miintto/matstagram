@@ -3,12 +3,19 @@ from enum import Enum
 from starlette import status
 
 
-class Http2XX(Enum):
+class BaseHttp(Enum):
+    def __init__(self, code: str, message: str, status_code: int):
+        self.code = code
+        self.message = message
+        self.status_code = status_code
+
+
+class Http2XX(BaseHttp):
     SUCCESS = ("S000", "성공", status.HTTP_200_OK)
     CREATED = ("S001", "생성 완료", status.HTTP_201_CREATED)
 
 
-class Http4XX(Enum):
+class Http4XX(BaseHttp):
     BAD_REQUEST = ("F000", "잘못된 요청입니다.", status.HTTP_400_BAD_REQUEST)
     UNAUTHENTICATED = ("F001", "잘못된 인증 정보입니다.", status.HTTP_401_UNAUTHORIZED)
     PERMISSION_DENIED = ("F002", "권한이 없습니다.", status.HTTP_403_FORBIDDEN)
@@ -33,7 +40,7 @@ class Http4XX(Enum):
     SHARE_NOT_FOUND = ("F011", "공유된 장소를 찾을 수 없습니다.", status.HTTP_404_NOT_FOUND)
 
 
-class Http5XX(Enum):
+class Http5XX(BaseHttp):
     UNKNOWN_ERROR = (
         "E000", "알 수 없는 에러 발생", status.HTTP_500_INTERNAL_SERVER_ERROR
     )

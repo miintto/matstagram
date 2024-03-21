@@ -4,7 +4,7 @@ from fastapi import Depends
 from sqlalchemy.exc import IntegrityError
 
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX, Http5XX
+from app.common.http.codes import Http4XX, Http5XX
 from app.common.types import ResultDict, ResultList
 from app.domain.repository.place import PlaceRepository
 from app.domain.repository.tag import TagRepository

@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy import select
 
-from app.api.place.models import Tag
+from app.domain.models.tag import Tag
 from app.api.place.schemas.resopnse import (
     TagCreatedResponse,
     TagListResponse,

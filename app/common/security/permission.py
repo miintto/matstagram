@@ -4,7 +4,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX
+from app.common.http.codes import Http4XX
 from app.config.connection import db
 from app.domain.models.user import AuthUser, UserPermission
 from .authentication import Authentication, HTTPAuthorizationCredentials

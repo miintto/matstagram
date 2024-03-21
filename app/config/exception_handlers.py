@@ -3,9 +3,9 @@ import logging
 from fastapi.exceptions import RequestValidationError
 from starlette.requests import Request
 
-from app.common.response import APIResponse
-from app.common.response.codes import Http4XX, Http5XX
-from . import APIException
+from app.common.http.codes import Http4XX, Http5XX
+from app.common.http.response import APIResponse
+from app.common.exception import APIException
 
 logger = logging.getLogger(__name__)
 

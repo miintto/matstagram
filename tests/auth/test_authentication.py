@@ -2,12 +2,12 @@ from unittest.mock import Mock
 
 import pytest
 
-from app.api.user.models import AuthUser, UserPermission
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX
+from app.common.http.codes import Http4XX
 from app.common.security.authentication import Authentication
 from app.common.security.jwt import JWTHandler
 from app.common.security.schemas import TokenType
+from app.domain.models.user import AuthUser, UserPermission
 from tests.management.testcase import BaseTestCase
 
 

@@ -1,7 +1,7 @@
 from fastapi import Depends
 
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX
+from app.common.http.codes import Http4XX
 from app.common.security.jwt import JWTHandler
 from app.common.types import ResultDict
 from app.domain.models.user import AuthUser

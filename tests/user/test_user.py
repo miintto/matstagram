@@ -5,13 +5,13 @@ import pytest
 from PIL import Image
 from sqlalchemy import select, update
 
-from app.api.user.models import AuthUser, UserPermission
 from app.api.user.schemas.response import (
     ImageUploadResponse,
     UserResponse,
     UserProfileResponse,
 )
 from app.common.schemas import CommonResponse, SuccessResponse
+from app.domain.models.user import AuthUser, UserPermission
 from tests.conftest import fixture_root_email, fixture_root_password
 from tests.management.testcase import BaseTestCase
 

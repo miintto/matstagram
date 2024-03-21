@@ -1,9 +1,8 @@
 import pytest
 from sqlalchemy import delete
 
-from app.api.user.models import AuthUser, UserPermission
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX
+from app.common.http.codes import Http4XX
 from app.common.security.permission import (
     AdminOnly,
     IsAuthenticated,
@@ -11,6 +10,7 @@ from app.common.security.permission import (
 )
 from app.common.security.schemas import HTTPAuthorizationCredentials
 from app.common.security.jwt import JWTHandler
+from app.domain.models.user import AuthUser, UserPermission
 from tests.management.testcase import BaseTestCase
 
 

@@ -4,7 +4,7 @@ import uuid
 from fastapi import UploadFile
 
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX
+from app.common.http.codes import Http4XX
 from app.config.settings import get_settings
 
 settings = get_settings()

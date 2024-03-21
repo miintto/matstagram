@@ -8,7 +8,7 @@ from app.domain.models.place import Place
 from app.domain.models.tag import PlaceTag, Tag
 from app.api.place.serializers import PlaceSerializer
 from app.common.exception import APIException
-from app.common.response.codes import Http4XX
+from app.common.http.codes import Http4XX
 from app.common.types import ResultList
 from app.domain.models.user import AuthUser
 from app.domain.models.location import Location, PlaceLocation
