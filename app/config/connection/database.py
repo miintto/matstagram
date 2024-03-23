@@ -1,4 +1,4 @@
-from asyncio import current_task
+from asyncio import current_task, open_connection, wait_for
 import logging
 
 from sqlalchemy.ext.asyncio import (
@@ -42,6 +42,12 @@ class DBConnection:
                 autoflush=False,
             ),
             scopefunc=current_task,
+        )
+
+    async def check_connection(self):
+        await wait_for(
+            open_connection(settings.DB_HOST, settings.DB_PORT, limit=1),
+            timeout=1
         )
 
     async def dispose_connection(self):

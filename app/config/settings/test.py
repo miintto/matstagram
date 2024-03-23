@@ -49,3 +49,5 @@ class TestSettings(Settings):
     DB_PORT = 5432
 
     SQLALCHEMY_POOL_SIZE = 10
+
+    REDIS_URL = "redis://127.0.0.1:6379"

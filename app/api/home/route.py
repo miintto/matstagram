@@ -1,7 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-from app.config.settings import get_settings
-from app.config.settings.base import Settings
 from .status import manager
 
 router = APIRouter()
@@ -13,5 +11,5 @@ def healthcheck() -> str:
 
 
 @router.get("/status", include_in_schema=False)
-async def healthcheck(settings: Settings = Depends(get_settings)) -> dict:
+async def status() -> dict:
     return await manager.check()
