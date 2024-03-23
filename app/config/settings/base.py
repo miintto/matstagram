@@ -32,5 +32,8 @@ class Settings(BaseSettings):
 
     SQLALCHEMY_POOL_SIZE: int
 
+    REDIS_URL: str
+    REDIS_MAX_CONNECTIONS: int = 100
+
     class Config:
         env_file = ".env"

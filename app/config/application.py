@@ -5,7 +5,7 @@ from starlette.middleware import Middleware
 from starlette.staticfiles import StaticFiles
 
 from app import __version__
-from app.config.connection import db
+from app.config.connection import db, redis
 from app.config.exception_handlers import exception_handlers
 from app.config.middleware.logging import LoggingMiddleware
 from app.config.router import router
@@ -30,6 +30,11 @@ def create_app() -> FastAPI:
     # Databases
     db.init_app()
     app.add_event_handler("shutdown", db.dispose_connection)
+
+    # Redis
+    redis.init_app()
+    app.add_event_handler("startup", redis.ping)
+    app.add_event_handler("shutdown", redis.close_connection)
 
     # Logging
     logging.config.dictConfig(settings.LOGGING_CONFIG)
