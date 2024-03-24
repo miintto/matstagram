@@ -17,3 +17,4 @@ class TestHealthCheck(BaseTestCase):
         res_json = response.json()
         assert res_json.get("status") == "ok"
         assert res_json.get("postgres") == "ok"
+        assert res_json.get("redis") == "ok"

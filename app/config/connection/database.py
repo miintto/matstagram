@@ -1,4 +1,4 @@
-from asyncio import current_task, open_connection, wait_for
+from asyncio import TimeoutError, current_task, open_connection, wait_for
 import logging
 
 from sqlalchemy.ext.asyncio import (
@@ -45,10 +45,13 @@ class DBConnection:
         )
 
     async def check_connection(self):
-        await wait_for(
-            open_connection(settings.DB_HOST, settings.DB_PORT, limit=1),
-            timeout=1
-        )
+        try:
+            await wait_for(
+                open_connection(self.engine.url.host, self.engine.url.port, limit=1),
+                timeout=1
+            )
+        except TimeoutError:
+            raise TimeoutError("Cannot connect to PostgreSQL.")
 
     async def dispose_connection(self):
         await self.engine.dispose()
